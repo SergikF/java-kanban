@@ -1,16 +1,21 @@
-public class Manager extends Base {
-    static int counter;
+// Класс управления проектом
 
+public class Manager extends Base {
+    static int counter; // временная переменная - счетчик задач при выводе
+
+    // добавляем задачу
     public static void addTask(Task taskNew) { //добавляем задачу
         task.put(taskNew.idTask, taskNew);
         Task.globalIdTask++;
     }
 
+    // добавляем эпик
     public static void addEpic(Task taskNew) { //добавляем эпик
         epic.put(taskNew.idTask, new Epic(taskNew.nameTask, taskNew.descriptionTask));
         Task.globalIdTask++;
     }
 
+    // добавляем подзадачу в эпик, с проверкой, что эпик существует
     public static void addSubTask(Task taskNew, int idEpic) {//добавляем подзадачу
         if (epic.containsKey(idEpic)) {
             subTask.put(taskNew.idTask, new SubTask(taskNew.nameTask, taskNew.descriptionTask, idEpic));
@@ -21,6 +26,7 @@ public class Manager extends Base {
         }
     }
 
+    // выводим список задач
     public static void printTasks() {
         System.out.println("Все задачи:");
         if (task.isEmpty() && epic.isEmpty() && subTask.isEmpty()) {
@@ -37,6 +43,7 @@ public class Manager extends Base {
         }
     }
 
+    // выводим список эпиков
     public static void printEpics() {
         System.out.println("Все эпики:");
         if (task.isEmpty() && epic.isEmpty() && subTask.isEmpty()) {
@@ -61,6 +68,7 @@ public class Manager extends Base {
         }
     }
 
+    // выводим список подзадач
     public static void printSubTasks() {
         System.out.println("Все подзадачи:");
         if (task.isEmpty() && epic.isEmpty() && subTask.isEmpty()) {
@@ -79,6 +87,7 @@ public class Manager extends Base {
         }
     }
 
+    // выводим полную информацию об эпике по его id, с проверкой, что эпик существует
     public static void printEpic( int id) {
         if (epic.containsKey(id)) {
             Epic epic = Base.epic.get(id);
@@ -99,6 +108,7 @@ public class Manager extends Base {
         }
     }
 
+    // выводим все данные канбана
     public static void printAllTasks() { //выводит все задачи
         System.out.println("Все данные канбана:");
         printTasks();
@@ -106,45 +116,52 @@ public class Manager extends Base {
         printSubTasks();
     }
 
+    // удаление задач
     public static void deleteAllTask() {
         task.clear();
         System.out.println("Все задачи удалены!");
     }
 
+    // удаление подзадач
     public static void deleteAllSubTask() {
         subTask.clear();
         System.out.println("Все подзадачи удалены!");
     }
 
+    // удаление эпиков, вместе с их подзадачами, для безопасности данных
     public static void deleteAllEpic() {
         epic.clear();
         subTask.clear();
         System.out.println("Все эпики c их подзадачами удалены!");
     }
 
+    // удаление любого типа задачи по его id
     public static void deleteSomething(int id) {
         String tempName;
-        if (task.containsKey(id)) {
+        if (task.containsKey(id)) { // если id найдено в задачах - удаляем задачу
             tempName = task.get(id).nameTask;
             task.remove(id);
             System.out.println("Задача " + tempName + " [id:" + id + "] удалена!");
-        } else if (epic.containsKey(id)) {
+        } else if (epic.containsKey(id)) { // если id найдено в эпиках - удаляем эпик
             tempName = epic.get(id).nameTask;
-            epic.remove(id);
-            Epic epic = Base.epic.get(id);
-            for (int i = 0; i < epic.subTasks.size(); i++) {
-                subTask.remove(epic.subTasks.get(i));
+            Epic epicTemp = Base.epic.get(id);
+            for (int i = 0; i < epicTemp.subTasks.size(); i++) { // разыскиваем подзадачи эпика и удаляем их
+                subTask.remove(epicTemp.subTasks.get(i));
             }
+            epic.remove(id);
             System.out.println("Эпик " + tempName + " [id:" + id + "] и его подзадачи удалены!");
-        } else if (subTask.containsKey(id)) {
+        } else if (subTask.containsKey(id)) { // если id найдено в подзадачах - удаляем подзадачу
             tempName = subTask.get(id).nameTask;
+            // находим эпик этой подзадачи и в списке подзадач эпика - удаляем текущую подзадачу
+            epic.get(subTask.get(id).idEpic).subTasks.remove((Object)subTask.get(id).idTask);
             subTask.remove(id);
             System.out.println("Подзадача " + tempName + " [id:" + id + "] удалена!");
-        } else {
+        } else { // если id найдено - уведомляем об этом
             System.out.println("Никакого типа задач с id " + id + " не существует!");
         }
     }
 
+    // получаем объекты по id
     public static Task getTask(int id) {
         Task resultTask;
         if (task.containsKey(id)) {
@@ -154,13 +171,15 @@ public class Manager extends Base {
         } else if (subTask.containsKey(id)) {
             resultTask = subTask.get(id);
         } else {
-            return null;
+            return null; // если id найдено - возвращаем null
         }
         return resultTask;
     }
 
     public static void updateTask(Task taskNew) {
         if (task.containsKey(taskNew.idTask)) {
+            // если id найдено в задачах - обновляем задачу
+            // при этом проверяем содержимое переданного объекта - и обрабатываем только то, что нужно
             if (taskNew.nameTask != null && !taskNew.nameTask.isEmpty()) {
                 task.get(taskNew.idTask).nameTask = taskNew.nameTask;
             }
@@ -171,6 +190,7 @@ public class Manager extends Base {
                 task.get(taskNew.idTask).statusTask = taskNew.statusTask;
             }
         } else if (epic.containsKey(taskNew.idTask)) {
+            // если id найдено в эпиках - обновляем эпик, но для эпика доступно только обновление описания эпика
             if (taskNew.nameTask != null && !taskNew.nameTask.isEmpty()) {
                 epic.get(taskNew.idTask).nameTask = taskNew.nameTask;
             }
@@ -178,6 +198,8 @@ public class Manager extends Base {
                 epic.get(taskNew.idTask).descriptionTask = taskNew.descriptionTask;
             }
         } else if (subTask.containsKey(taskNew.idTask)) {
+            // если id найдено в подзадачах - обновляем подзадачу
+            // при этом проверяем содержимое переданного объекта - и обрабатываем только то, что нужно
             if (taskNew.nameTask != null && !taskNew.nameTask.isEmpty()) {
                 subTask.get(taskNew.idTask).nameTask = taskNew.nameTask;
             }
@@ -187,26 +209,31 @@ public class Manager extends Base {
             if (taskNew.statusTask != null ) {
                 subTask.get(taskNew.idTask).statusTask = taskNew.statusTask;
             }
-
+            // после обновления подзадачи проводим проверку, как это повлияло на эпик этой задачи
             Epic epic = Base.epic.get(subTask.get(taskNew.idTask).idEpic);
-            int statusResult = 0;
+            int statusResult = 0; // временная переменная для подсчёта новых и выполненных задач в эпике
+            // перебираем задачи эпика для проверки их статуса состояния
             for (int i = 0; i < epic.subTasks.size(); i++) {
+                // если статус подзадачи NEW - уменьшаем на единицу
                 if(Base.subTask.get(epic.subTasks.get(i)).statusTask == StatusTask.NEW){
                     statusResult--;
                 }
+                // если статус подзадачи DONE - увеличиваем на единицу
                 if(Base.subTask.get(epic.subTasks.get(i)).statusTask == StatusTask.DONE){
                     statusResult++;
                 }
             }
             if (statusResult == epic.subTasks.size()) {
+                // если переменная равна количеству задач в списке - значит все задачи выполнены
                 epic.statusTask = StatusTask.DONE;
             } else if (statusResult == (-epic.subTasks.size())){
+                // если переменная равна количеству задач в списке, но с отрицательным знаком - значит все задачи новые
                 epic.statusTask = StatusTask.NEW;
             } else {
+                // все другие варианты означают, что эпик в процессе выполнения
                 epic.statusTask = StatusTask.IN_PROGRESS;
             }
-
-        } else {
+        } else { // если id найдено - уведомляем об этом
             System.out.println("Задача с таким id не найдена!");
         }
     }

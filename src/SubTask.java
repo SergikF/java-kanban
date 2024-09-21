@@ -1,7 +1,9 @@
 import java.util.Objects;
 
+// Класс подзадач эпиков
+
 public class SubTask extends Task {
-    public int idEpic;
+    public int idEpic; // Идентификатор родительского эпика
 
     public SubTask(String name, String description, int idEpic) {
         super(name, description);

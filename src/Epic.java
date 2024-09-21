@@ -1,9 +1,11 @@
 import java.util.ArrayList;
 import java.util.Objects;
 
+// Класс Эпиков
+
 public class Epic extends Task{
 
-    public ArrayList<Integer> subTasks;
+    public ArrayList<Integer> subTasks; // Массив для хранения id подзадач
 
     public Epic(String name, String description) {
         super(name, description);
