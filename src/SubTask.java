@@ -3,11 +3,15 @@ import java.util.Objects;
 // Класс подзадач эпиков
 
 public class SubTask extends Task {
-    public int idEpic; // Идентификатор родительского эпика
+    private final int idEpic; // Идентификатор родительского эпика
 
-    public SubTask(String name, String description, int idEpic) {
-        super(name, description);
+    public SubTask(int id, String name, String description, Status status, int idEpic) {
+        super(id, name, description, status);
         this.idEpic = idEpic;
+    }
+
+    public int getIdEpic() {
+        return idEpic;
     }
 
     @Override
@@ -26,12 +30,6 @@ public class SubTask extends Task {
 
     @Override
     public String toString() {
-        return "SubTask{" +
-                "idTask=" + idTask +
-                ", nameTask='" + nameTask + '\'' +
-                ", descriptionTask='" + descriptionTask + '\'' +
-                ", idEpic=" + idEpic +
-                ", statusTask=" + statusTask +
-                '}';
+        return "Sub" + super.toString().substring(0, super.toString().length() - 1) + ", idEpic=" + idEpic + "}";
     }
 }

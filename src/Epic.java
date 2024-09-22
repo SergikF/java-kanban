@@ -5,15 +5,20 @@ import java.util.Objects;
 
 public class Epic extends Task{
 
-    public ArrayList<Integer> subTasks; // Массив для хранения id подзадач
+    private final ArrayList<Integer> idSubTasks; // Массив для хранения id подзадач
 
-    public Epic(String name, String description) {
-        super(name, description);
-        subTasks = new ArrayList<>();
+    public Epic(int id, String name, String description, Status status, ArrayList<Integer> idSubTasks) {
+        super(id, name, description, status);
+        this.idSubTasks = new ArrayList<>();
+        this.idSubTasks.addAll(idSubTasks);
     }
 
     public void addSubTask(int idTask) {
-        subTasks.add(idTask);
+        idSubTasks.add(idTask);
+    }
+
+    public ArrayList<Integer> getIdSubTasks() {
+        return idSubTasks;
     }
 
     @Override
@@ -22,23 +27,17 @@ public class Epic extends Task{
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Epic epic = (Epic) o;
-        return Objects.equals(subTasks, epic.subTasks);
+        return Objects.equals(idSubTasks, epic.idSubTasks);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), subTasks);
+        return Objects.hash(super.hashCode(), idSubTasks);
     }
 
     @Override
     public String toString() {
-        return "Epic{" +
-                "idTask=" + idTask +
-                ", nameTask='" + nameTask + '\'' +
-                ", descriptionTask='" + descriptionTask + '\'' +
-                ", subTasks=" + subTasks +
-                ", statusTask=" + statusTask +
-                '}';
+        return "Epic{" + (super.toString()).substring(5, super.toString().length() - 1) + ", idSubTasks=" + idSubTasks + "}";
     }
 
 }

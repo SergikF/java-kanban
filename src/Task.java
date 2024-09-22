@@ -3,24 +3,32 @@ import java.util.Objects;
 // Базовый класс задачи
 
 public class Task {
-    public static int globalIdTask = 1; // Глобальный счётчик всех задач
-    public int idTask;
-    public String nameTask;
-    public String descriptionTask;
-    public StatusTask statusTask = StatusTask.NEW;
+    private int id;
+    private String name;
+    private String description;
+    private Status status;
 
-    public Task(String nameTask, String descriptionTask) { // Конструктор для создания задачи
-        this.idTask = globalIdTask;
-        this.nameTask = nameTask;
-        this.descriptionTask = descriptionTask;
+    public Task(int id, String name, String description, Status status) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.status = status;
     }
 
-    // Конструктор для создания объектов, необходимых при обновлении данных в задачах
-    public Task(int idTask, String nameTask, String descriptionTask, StatusTask statusTask) {
-        this.idTask = idTask;
-        this.nameTask = nameTask;
-        this.descriptionTask = descriptionTask;
-        this.statusTask = statusTask;
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
     @Override
@@ -28,22 +36,18 @@ public class Task {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
-        return idTask == task.idTask && Objects.equals(nameTask, task.nameTask) && Objects.equals(descriptionTask, task.descriptionTask) && statusTask == task.statusTask;
+        return id == task.id && Objects.equals(name, task.name) && Objects.equals(description, task.description) && status == task.status;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idTask, nameTask, descriptionTask, statusTask);
+        return Objects.hash(id, name, description, status);
     }
 
     @Override
     public String toString() {
-        return "Task{" +
-                "idTask=" + idTask +
-                ", nameTask='" + nameTask + '\'' +
-                ", descriptionTask='" + descriptionTask + '\'' +
-                ", statusTask=" + statusTask +
-                '}';
+        return "Task{" + "id=" + id + ", name='" + name + '\'' +
+                ", description='" + description + '\'' + ", status=" + status + '}';
     }
 
 }
