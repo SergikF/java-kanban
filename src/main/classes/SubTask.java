@@ -1,3 +1,5 @@
+package main.classes;
+
 import java.util.Objects;
 
 // Класс подзадач эпиков

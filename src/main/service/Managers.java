@@ -1,3 +1,10 @@
+package main.service;
+
+import main.classes.Epic;
+import main.classes.Status;
+import main.classes.SubTask;
+import main.classes.Task;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -5,13 +12,12 @@ import java.util.List;
 public class Managers {
 
     public static TaskManager getDefault() {
-        TaskManager taskManager;
-        taskManager = new TaskManager() {
+        return new TaskManager() {
             private int globalId = 1; // Глобальный счётчик всех задач
             private final HashMap<Integer, Task> task = new HashMap<>();
             private final HashMap<Integer, Epic> epic = new HashMap<>();
             private final HashMap<Integer, SubTask> subTask = new HashMap<>();
-            private final ArrayList<Integer> history = new ArrayList<>(10);
+            private final HistoryManager history = getDefaultHistory();
 
 
             // добавляем задачу
@@ -75,28 +81,19 @@ public class Managers {
 
             @Override
             public Task getTask(int id) {
-                if (history.size() == 10) {
-                    history.remove(0);
-                }
-                history.add(id);
+                history.addHistory(task.get(id));
                 return task.get(id);
             }
 
             @Override
             public Epic getEpic(int id) {
-                if (history.size() == 10) {
-                    history.remove(0);
-                }
-                history.add(id);
+                history.addHistory(epic.get(id));
                 return epic.get(id);
             }
 
             @Override
             public SubTask getSubTask(int id) {
-                if (history.size() == 10) {
-                    history.remove(0);
-                }
-                history.add(id);
+                history.addHistory(subTask.get(id));
                 return subTask.get(id);
             }
 
@@ -109,10 +106,7 @@ public class Managers {
                     for (Integer integer : listTemp) {
                         result.add(subTask.get(integer));
                     }
-                    if (history.size() == 10) {
-                        history.remove(0);
-                    }
-                    history.add(id);
+                    history.addHistory(epic.get(id));
                 } else {
                     return false; // если эпик не существует
                 }
@@ -221,21 +215,6 @@ public class Managers {
                 }
             }
 
-            @Override
-            public List<Task> getHistory() {
-                List<Task> result = new ArrayList<>();
-                for (int j : history) {
-                    if (task.containsKey(j)) {
-                        result.add(task.get(j));
-                    } else if (subTask.containsKey(j)) {
-                        result.add(subTask.get(j));
-                    } else if (epic.containsKey(j)) {
-                        result.add(epic.get(j));
-                    }
-                }
-                return result;
-            }
-
             private void checkStatusEpic(int id) {
                 int statusResult = 0; // временная переменная для подсчёта новых и выполненных задач в эпике
                 ArrayList<Integer> listTemp = epic.get(id).getIdSubTasks(); // список подзадач для проверки статуса
@@ -262,7 +241,29 @@ public class Managers {
                     epic.get(id).setStatus(Status.IN_PROGRESS);
                 }
             }
+
+            public List<Task> getHistory() {
+                return history.getHistory();
+            }
         };
-        return taskManager;
+    }
+
+    public static HistoryManager getDefaultHistory() {
+        return new HistoryManager() {
+            private final ArrayList<Task> history = new ArrayList<>();
+
+            @Override
+            public void addHistory(Task task) {
+                if (history.size() == 10) {
+                    history.removeFirst();
+                }
+                history.add(task);
+            }
+
+            @Override
+            public List<Task> getHistory() {
+                return history;
+            }
+        };
     }
 }

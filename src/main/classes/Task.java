@@ -1,3 +1,5 @@
+package main.classes;
+
 import java.util.Objects;
 
 // Базовый класс задачи
@@ -17,6 +19,14 @@ public class Task {
 
     public int getId() {
         return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public void setId(int id) {

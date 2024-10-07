@@ -1,3 +1,12 @@
+package main;
+
+import main.classes.Epic;
+import main.classes.Status;
+import main.classes.SubTask;
+import main.classes.Task;
+import main.service.Managers;
+import main.service.TaskManager;
+
 import java.util.ArrayList;
 
 public class Main {
@@ -82,7 +91,10 @@ public class Main {
         System.out.println(exampleTaskManager.getEpicSubTasks(5));
         System.out.println("============================");
         System.out.println();
+
+        // Проверяем состояние истории
         System.out.println(exampleTaskManager.getHistory());
+        System.out.println("============================");
         System.out.println();
 
         // 6. Тестируем удаление.
@@ -119,6 +131,12 @@ public class Main {
         exampleTaskManager.deleteAllEpics();
         System.out.println("стало - " + exampleTaskManager.getAllEpics());
         System.out.println("============================");
+        System.out.println();
+
+        // Проверяем состояние истории
+        System.out.println(exampleTaskManager.getHistory());
+        System.out.println("============================");
+        System.out.println();
 
     }
 }
