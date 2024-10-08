@@ -4,7 +4,7 @@ import main.classes.Task;
 
 import java.util.List;
 
-public interface HistoryManager {
+public interface HistoryManagerService {
     void addHistory(Task task);
     public List<Task> getHistory();
 }

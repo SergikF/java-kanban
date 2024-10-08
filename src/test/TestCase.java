@@ -5,7 +5,7 @@ import main.classes.Status;
 import main.classes.SubTask;
 import main.classes.Task;
 import main.service.Managers;
-import main.service.TaskManager;
+import main.service.TaskManagerService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 class TestCase {
 
-    private static TaskManager testManager;
+    private static TaskManagerService testManager;
     private static Task taskItem;
     private static Epic epicItem;
     private static SubTask subTaskItem;

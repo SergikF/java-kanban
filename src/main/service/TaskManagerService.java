@@ -7,7 +7,7 @@ import main.classes.Task;
 import java.util.ArrayList;
 import java.util.List;
 
-public interface TaskManager {
+public interface TaskManagerService {
     // добавляем задачу
     void addTask(Task taskNew);
 
