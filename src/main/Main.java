@@ -84,8 +84,7 @@ public class Main {
         System.out.println("было - " + exampleTaskManagerService.getEpic(5));
         exampleTaskManagerService.updateEpic(
                 new Epic(5, "Обед", "Время покушать", Status.IN_PROGRESS,
-                        new ArrayList<>() {
-                            {
+                        new ArrayList<>() {{
                                 add(6);
                                 add(7);
                             }
