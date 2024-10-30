@@ -2,26 +2,36 @@ package main.service;
 
 import main.classes.Task;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class HistoryManagerImpl implements HistoryManagerService {
     private final Map<Integer, Node<Task>> history = new HashMap<>();
     private Node<Task> first;
     private Node<Task> last;
 
-    static class Node<Task> {
-        private Task data;
-        private Node<Task> next;
-        private Node<Task> prev;
+    static class Node<T> {
+        private T data;
+        private Node<T> next;
+        private Node<T> prev;
 
-        public Node(Node<Task> prev, Task data, Node<Task> next) {
+        public Node(Node<T> prev, T data, Node<T> next) {
             this.prev = prev;
             this.data = data;
             this.next = next;
         }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof Node<?> node)) return false;
+            return Objects.equals(data, node.data) && Objects.equals(next, node.next) && Objects.equals(prev, node.prev);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(data, next, prev);
+        }
+
     }
 
     @Override
