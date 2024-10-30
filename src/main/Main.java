@@ -22,7 +22,7 @@ public class Main {
                         Status.NEW));
         exampleTaskManagerService.addEpic(
                 new Epic(exampleTaskManagerService.getGlobalId(), "Этапы", "Поэтапная работа",
-                        Status.NEW, new ArrayList<Integer>()));
+                        Status.NEW, new ArrayList<>()));
         exampleTaskManagerService.addSubTask(
                 new SubTask(exampleTaskManagerService.getGlobalId(), "Этап 1", "Подготовка к работе",
                         Status.NEW,2));
@@ -31,7 +31,7 @@ public class Main {
                         Status.NEW));
         exampleTaskManagerService.addEpic(
                 new Epic(exampleTaskManagerService.getGlobalId(), "Обед", "Нужно утолить голод",
-                        Status.NEW, new ArrayList<Integer>()));
+                        Status.NEW, new ArrayList<>()));
         exampleTaskManagerService.addSubTask(
                 new SubTask(exampleTaskManagerService.getGlobalId(), "Закупка", "Надо в магазин",
                         Status.NEW,5));
@@ -84,7 +84,7 @@ public class Main {
         System.out.println("было - " + exampleTaskManagerService.getEpic(5));
         exampleTaskManagerService.updateEpic(
                 new Epic(5,"Обед", "Время покушать", Status.IN_PROGRESS,
-                        new ArrayList<Integer>(){{ add(6); add(7); }}));
+                        new ArrayList<>() {{ add(6); add(7); }} ));
         System.out.println("стало/было - " + exampleTaskManagerService.getEpic(5));
         // обновляем эпику "Обед" его подзадачу для проверки изменения статуса эпика
         exampleTaskManagerService.updateSubTask(

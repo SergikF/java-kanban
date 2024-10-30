@@ -8,11 +8,11 @@ import java.util.List;
 import java.util.Map;
 
 public class HistoryManagerImpl implements HistoryManagerService {
-    private final Map<Integer, Node> history = new HashMap<>();
+    private final Map<Integer, Node<Task>> history = new HashMap<>();
     private Node<Task> first;
     private Node<Task> last;
 
-    class Node<Task> {
+    static class Node<Task> {
         private Task data;
         private Node<Task> next;
         private Node<Task> prev;
@@ -45,7 +45,7 @@ public class HistoryManagerImpl implements HistoryManagerService {
     @Override
     public void remove(int id) {                // удаляем запись из истории
         if (history.containsKey(id)) {
-            Node node = history.get(id);
+            Node<Task> node = history.get(id);
             if (node == first && node == last) {
                 first = null;
                 last = null;
@@ -67,9 +67,9 @@ public class HistoryManagerImpl implements HistoryManagerService {
     @Override
     public List<Task> getHistory() {
         List<Task> result = new ArrayList<>();
-        Node node = first;
+        Node<Task> node = first;
         while (node != null) {
-            result.add((Task) node.data);
+            result.add(node.data);
             node = node.next;
         }
         return result;

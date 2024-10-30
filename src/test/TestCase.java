@@ -32,7 +32,7 @@ class TestCase {
         taskItem = new Task(testManager.getGlobalId(),
                 "Работа", "Просто задача", Status.NEW);
         epicItem = new Epic(testManager.getGlobalId(),
-                "Этапы", "Поэтапная работа", Status.NEW, new ArrayList<Integer>());
+                "Этапы", "Поэтапная работа", Status.NEW, new ArrayList<>());
         subTaskItem = new SubTask(testManager.getGlobalId(),
                 "Этап 1", "Подготовка к работе", Status.NEW,2);
 
@@ -143,13 +143,13 @@ class TestCase {
         // удаляем задачу и проверяем состояние истории - уменьшилась ли она, и есть ли запись с удалённой задачей.
         testManager.deleteTask(1);
         Assertions.assertEquals(2, testManager.getHistory().size(), "В истории не удалена запись.");
-        Assertions.assertEquals(null, testManager.getTask(1), "Задача не удалена.");
+        Assertions.assertNull(testManager.getTask(1), "Задача не удалена.");
         // повторяем то-же самое с подзадачей и эпиком
         testManager.deleteSubTask(3);
         Assertions.assertEquals(1, testManager.getHistory().size(), "В истории не удалена запись.");
-        Assertions.assertEquals(null, testManager.getSubTask(3), "Подзадача не удалена.");
+        Assertions.assertNull(testManager.getSubTask(3), "Подзадача не удалена.");
         testManager.deleteEpic(2);
         Assertions.assertEquals(0, testManager.getHistory().size(), "В истории не удалена запись.");
-        Assertions.assertEquals(null, testManager.getEpic(2), "Эпик не удален.");
+        Assertions.assertNull(testManager.getEpic(2), "Эпик не удален.");
     }
 }
