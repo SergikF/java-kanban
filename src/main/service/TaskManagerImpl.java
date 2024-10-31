@@ -145,8 +145,8 @@ public class TaskManagerImpl implements TaskManagerService {
     @Override
     public boolean deleteTask(int id) {
         if (task.containsKey(id)) { // если id найдено - удаляем задачу
-            history.remove(id);
             task.remove(id);
+            history.remove(id);
             return true;
         } else { // если id не найдено - уведомляем об этом
             return false;
@@ -159,11 +159,11 @@ public class TaskManagerImpl implements TaskManagerService {
         if (epic.containsKey(id)) { // если id найдено в - удаляем эпик
             ArrayList<Integer> listTemp = epic.get(id).getIdSubTasks();
             for (Integer integer : listTemp) { // разыскиваем подзадачи эпика и удаляем их
-                history.remove(integer);
                 subTask.remove(integer);
+                history.remove(integer);
             }
-            history.remove(id);
             epic.remove(id);
+            history.remove(id);
             return true;
         } else { // если id не найдено - уведомляем об этом
             return false;
@@ -175,8 +175,8 @@ public class TaskManagerImpl implements TaskManagerService {
     public boolean deleteSubTask(int id) {
         if (subTask.containsKey(id)) { // если id найдено в подзадачах - удаляем подзадачу
             SubTask subTaskTemp = subTask.get(id);
-            history.remove(subTaskTemp.getId());
             subTask.remove(id);
+            history.remove(subTaskTemp.getId());
             // находим эпик этой подзадачи и в списке подзадач эпика - удаляем текущую подзадачу
             epic.get(subTaskTemp.getIdEpic()).getIdSubTasks().remove((Object) subTaskTemp.getId());
             checkStatusEpic(subTaskTemp.getIdEpic()); // проверяем статус эпика, чтобы откорректировать реальный статус
