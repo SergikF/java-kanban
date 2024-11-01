@@ -14,7 +14,7 @@ public class TaskManagerImpl implements TaskManagerService {
     private final HashMap<Integer, Task> task = new HashMap<>();
     private final HashMap<Integer, Epic> epic = new HashMap<>();
     private final HashMap<Integer, SubTask> subTask = new HashMap<>();
-    private final HistoryManagerService history =  Managers.getDefaultHistory();
+    private final HistoryManagerService history = Managers.getDefaultHistory();
 
     // добавляем задачу
     @Override
@@ -77,19 +77,25 @@ public class TaskManagerImpl implements TaskManagerService {
 
     @Override
     public Task getTask(int id) {
-        history.addHistory(task.get(id));
+        if (task.containsKey(id)) {
+            history.add(task.get(id));
+        }
         return task.get(id);
     }
 
     @Override
     public Epic getEpic(int id) {
-        history.addHistory(epic.get(id));
+        if (epic.containsKey(id)) {
+            history.add(epic.get(id));
+        }
         return epic.get(id);
     }
 
     @Override
     public SubTask getSubTask(int id) {
-        history.addHistory(subTask.get(id));
+        if (subTask.containsKey(id)) {
+            history.add(subTask.get(id));
+        }
         return subTask.get(id);
     }
 
@@ -101,8 +107,9 @@ public class TaskManagerImpl implements TaskManagerService {
             ArrayList<Integer> listTemp = epic.get(id).getIdSubTasks();
             for (Integer integer : listTemp) {
                 result.add(subTask.get(integer));
+                history.add(subTask.get(integer));
             }
-            history.addHistory(epic.get(id));
+            history.add(epic.get(id));
         } else {
             return false; // если эпик не существует
         }
@@ -113,24 +120,25 @@ public class TaskManagerImpl implements TaskManagerService {
     // удаление задач
     @Override
     public void deleteAllTasks() {
-        task.clear();
+        for (int key : task.keySet()) {
+            deleteTask(key);
+        }
     }
 
     // удаление подзадач
     @Override
     public void deleteAllSubTasks() {
-        subTask.clear();
-        for (int key : epic.keySet()) { // удаляем все подзадачи эпика и обновляем статус эпика (NEW)
-            epic.get(key).getIdSubTasks().clear();
-            checkStatusEpic(key);
+        for (int key : subTask.keySet()) {
+            deleteSubTask(key);
         }
     }
 
     // удаление эпиков, вместе с их подзадачами, для безопасности данных
     @Override
     public void deleteAllEpics() {
-        epic.clear();
-        subTask.clear();
+        for (int key : epic.keySet()) {
+            deleteEpic(key);
+        }
     }
 
     // удаление задачи по id
@@ -138,6 +146,7 @@ public class TaskManagerImpl implements TaskManagerService {
     public boolean deleteTask(int id) {
         if (task.containsKey(id)) { // если id найдено - удаляем задачу
             task.remove(id);
+            history.remove(id);
             return true;
         } else { // если id не найдено - уведомляем об этом
             return false;
@@ -151,8 +160,10 @@ public class TaskManagerImpl implements TaskManagerService {
             ArrayList<Integer> listTemp = epic.get(id).getIdSubTasks();
             for (Integer integer : listTemp) { // разыскиваем подзадачи эпика и удаляем их
                 subTask.remove(integer);
+                history.remove(integer);
             }
             epic.remove(id);
+            history.remove(id);
             return true;
         } else { // если id не найдено - уведомляем об этом
             return false;
@@ -165,6 +176,7 @@ public class TaskManagerImpl implements TaskManagerService {
         if (subTask.containsKey(id)) { // если id найдено в подзадачах - удаляем подзадачу
             SubTask subTaskTemp = subTask.get(id);
             subTask.remove(id);
+            history.remove(subTaskTemp.getId());
             // находим эпик этой подзадачи и в списке подзадач эпика - удаляем текущую подзадачу
             epic.get(subTaskTemp.getIdEpic()).getIdSubTasks().remove((Object) subTaskTemp.getId());
             checkStatusEpic(subTaskTemp.getIdEpic()); // проверяем статус эпика, чтобы откорректировать реальный статус

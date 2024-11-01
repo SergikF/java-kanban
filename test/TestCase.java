@@ -20,7 +20,7 @@ class TestCase {
 
     @BeforeEach
     void initializeTaskManager() {
-    // Проверяем создание менеджера через утилитарный класс, используем его в тестах
+        // Проверяем создание менеджера через утилитарный класс, используем его в тестах
         testManager = Managers.getDefault();
         Assertions.assertNotNull(testManager); // проверяем что менеджер создан
         Assertions.assertNotNull(testManager.getAllTasks()); // проверяем что список задач создан
