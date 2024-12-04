@@ -109,7 +109,8 @@ public class Main {
         // обновляем эпик "Обед" для проверки изменения описания
         System.out.println("было - " + exampleTM2.getEpic(5));
         exampleTM2.updateEpic(new Epic(5, "Обед",
-                "Время покушать", Status.IN_PROGRESS, new ArrayList<>() {{   add(6);
+                "Время покушать", Status.IN_PROGRESS, new ArrayList<>() {
+            {   add(6);
                 add(7);
             }
         }));
