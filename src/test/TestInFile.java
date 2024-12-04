@@ -13,8 +13,6 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 
 class TestInFile {
@@ -27,20 +25,17 @@ class TestInFile {
     @BeforeEach
     void initializeTaskManager() {
         // Создаем пустой файл для менеджера задач
-        Path testFile;
+        File testFile;
         try {
-            testFile = File.createTempFile("test", ".csv").toPath();
+            testFile = File.createTempFile("test", ".csv");
         } catch (IOException e) {
             throw new ManagerSaveException("Не удалось создать временный файл");
         }
 
         // Проверяем что файл создан и он пустой
-        Assertions.assertTrue(Files.exists(testFile));
-        try {
-            Assertions.assertEquals(0, Files.size(testFile));
-        } catch (IOException e) {
-            throw new ManagerSaveException("Нет доступа к временному файлу");
-        }
+        Assertions.assertNotNull(testFile);
+        // Проверяем что файл пустой
+        Assertions.assertEquals(0, testFile.length());
 
         // Проверяем создание менеджера через утилитарный класс, используем его в тестах
         testManager = Managers.getFile(testFile);
@@ -48,7 +43,7 @@ class TestInFile {
         Assertions.assertNotNull(testManager); // проверяем что менеджер создан
         Assertions.assertNotNull(testManager.getAllTasks()); // проверяем что список задач создан
         Assertions.assertNotNull(testManager.getAllEpics()); // проверяем что список эпиков создан
-        Assertions.assertNotNull(testManager.getAllSubTasks()); // проверяем что список субзадач создан
+        Assertions.assertNotNull(testManager.getAllSubTasks()); // проверяем что список подзадач создан
         Assertions.assertNotNull(testManager.getHistory()); // проверяем что история создана
 
         // Если при создании менеджера не было ошибок - значит пустой файл был считан и тест пройден.
@@ -72,15 +67,11 @@ class TestInFile {
         testManager.addEpic(epicItem);
         testManager.addSubTask(subTaskItem);
 
-        // проверяем, что файл не пустой
-        try {
-            Assertions.assertNotEquals(0, Files.size(testManager.getPath()));
-            } catch (IOException e) {
-            throw new ManagerSaveException("Нет доступа к временному файлу");
-        }
+        // Проверяем что файл не пустой
+        Assertions.assertNotEquals(0, testManager.getFile().length());
 
         // Считываем данные из файла в другой экземпляр менеджера
-        TaskManager testManager2 = Managers.getFile(testManager.getPath());
+        TaskManager testManager2 = Managers.getFile(testManager.getFile());
 
         // Проверяем что данные из файла были считаны правильно и равны исходным
         Assertions.assertEquals(testManager.getAllTasks(), testManager2.getAllTasks());
@@ -102,11 +93,7 @@ class TestInFile {
         Assertions.assertTrue(testManager2.getAllEpics().isEmpty());
         Assertions.assertTrue(testManager2.getAllSubTasks().isEmpty());
         // Проверяем, что файл второго менеджера пустой
-        try {
-            Assertions.assertEquals(0, Files.size(testManager2.getPath()));
-            } catch (IOException e) {
-            throw new ManagerSaveException("Нет доступа к временному файлу");
-        }
+        Assertions.assertEquals(0, testManager2.getFile().length());
 
     }
 
@@ -128,14 +115,14 @@ class TestInFile {
 
         // Проверяем, что globalId имеет последний свободный id номер
         Assertions.assertEquals(4, testManager.getGlobalId());
-        // Проверяем, что элементы добавлены в менеджер
+        // Проверяем, что элементы добавлены в менеджере
         // затем ищем элемент в менеджере по его id
         // и сравниваем с элементом созданным в тесте
         Assertions.assertEquals(taskItem, testManager.getTask(taskItem.getId()));
         Assertions.assertEquals(epicItem, testManager.getEpic(epicItem.getId()));
         Assertions.assertEquals(subTaskItem, testManager.getSubTask(subTaskItem.getId()));
 
-        // Проверяем идентичность отправляемых элементов в менеджер с сохранёнными в менеджере по всем значениям
+        // Проверяем идентичность отправляемых элементов в менеджере с сохранёнными в менеджере по всем значениям
         // Проверяем обычные задачи
         Assertions.assertEquals(taskItem.getName(), testManager.getTask(taskItem.getId()).getName());
         Assertions.assertEquals(taskItem.getDescription(), testManager.getTask(taskItem.getId()).getDescription());
@@ -260,7 +247,7 @@ class TestInFile {
         taskItem1 = testManager.getTask(1);
         taskItem1 = testManager.getSubTask(3);
         taskItem1 = testManager.getEpic(2);
-        // проверяем, что история осталась с 3 элементам. Что дублирования записей нет.
+        // Проверяем, что история осталась с 3 элементам. Что дублирования записей нет.
         Assertions.assertEquals(3, testManager.getHistory().size(), "В истории появились дубли.");
         // удаляем задачу и проверяем состояние истории - уменьшилась ли она, и есть ли запись с удалённой задачей.
         testManager.deleteTask(1);

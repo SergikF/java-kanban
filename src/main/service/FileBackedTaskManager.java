@@ -2,34 +2,32 @@ package main.service;
 
 import main.classes.*;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
 
-    public Path path;
+    private final File file;
 
-    public FileBackedTaskManager(Path path) {
+    public FileBackedTaskManager(File file) {
         super();
-        this.path = path;
+        this.file = file;
         this.loadFromFile();
     }
 
-    public Path getPath() {
-        return path;
+    public File getFile() {
+        return file;
     }
 
     public void loadFromFile() {
-        if (Files.exists(this.path)) {
-            try (BufferedReader br = Files.newBufferedReader(this.path, StandardCharsets.UTF_8)) {
-                // br.readLine();
-                while (br.ready()) {
+
+        // если файл существует, то считываем из него данные
+
+        if (this.file.exists()) {
+            try (BufferedReader br = new BufferedReader(new FileReader(this.file, StandardCharsets.UTF_8))) {
+                                while (br.ready()) {
                     String line = br.readLine();
                     Task loadTask = fromString(line);
 
@@ -77,8 +75,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
     }
 
-    public void save() {
-        try (BufferedWriter bw = Files.newBufferedWriter(this.path, StandardCharsets.UTF_8)) {
+    private void save() {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(this.file, StandardCharsets.UTF_8))) {
             // Записываем в файл Task
             for (int key : task.keySet()) {
                 bw.write(toString(task.get(key)));

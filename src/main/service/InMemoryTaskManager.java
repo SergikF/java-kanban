@@ -5,7 +5,7 @@ import main.classes.Status;
 import main.classes.SubTask;
 import main.classes.Task;
 
-import java.nio.file.Path;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -256,7 +256,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Path getPath() {
+    public File getFile() {
         return null;
     }
 }

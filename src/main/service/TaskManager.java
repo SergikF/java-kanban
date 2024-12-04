@@ -4,7 +4,7 @@ import main.classes.Epic;
 import main.classes.SubTask;
 import main.classes.Task;
 
-import java.nio.file.Path;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,5 +61,5 @@ public interface TaskManager {
 
     List<Task> getHistory();
 
-    Path getPath();
+    File getFile();
 }

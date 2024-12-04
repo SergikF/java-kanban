@@ -10,7 +10,6 @@ import main.service.TaskManager;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.ArrayList;
 
 public class Main {
@@ -18,9 +17,9 @@ public class Main {
     public static void main(String[] args) {
 
         // Проверяем работу менеджера задач
-        Path testFile;
+        File testFile;
         try {
-            testFile = File.createTempFile("test", ".csv").toPath();
+            testFile = File.createTempFile("test", ".csv");
         } catch (IOException e) {
             throw new ManagerSaveException("Не удалось создать временный файл");
         }
