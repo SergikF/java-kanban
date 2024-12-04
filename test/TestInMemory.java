@@ -5,22 +5,22 @@ import main.classes.Status;
 import main.classes.SubTask;
 import main.classes.Task;
 import main.service.Managers;
-import main.service.TaskManagerService;
+import main.service.TaskManager;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 
-class TestCase {
+class TestInMemory {
 
-    private static TaskManagerService testManager;
+    private static TaskManager testManager;
     private static Task taskItem;
     private static Epic epicItem;
     private static SubTask subTaskItem;
 
     @BeforeEach
     void initializeTaskManager() {
-        // Проверяем создание менеджера через утилитарный класс, используем его в тестах
+    // Проверяем создание менеджера через утилитарный класс, используем его в тестах
         testManager = Managers.getDefault();
         Assertions.assertNotNull(testManager); // проверяем что менеджер создан
         Assertions.assertNotNull(testManager.getAllTasks()); // проверяем что список задач создан
