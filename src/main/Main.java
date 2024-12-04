@@ -110,8 +110,7 @@ public class Main {
         System.out.println("было - " + exampleTM2.getEpic(5));
         exampleTM2.updateEpic(new Epic(5, "Обед",
                 "Время покушать", Status.IN_PROGRESS, new ArrayList<>() {
-            {
-                add(6);
+            {   add(6);
                 add(7);
             }
         }));
