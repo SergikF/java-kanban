@@ -26,7 +26,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     public void loadFromFile() {
-        if(Files.exists(this.path)) {
+        if (Files.exists(this.path)) {
             try (BufferedReader br = Files.newBufferedReader(this.path, StandardCharsets.UTF_8)) {
                 // br.readLine();
                 while (br.ready()) {
@@ -101,7 +101,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     public String toString(Task task) { // метод обработки считываемой из файла строки
-        String type ="";
+        String type = "";
         int idEpic = 0;
         switch (task.getClass().getSimpleName()) {
             case "Task" -> type = "TASK";
@@ -111,7 +111,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 idEpic = ((SubTask) task).getIdEpic();
             }
         }
-        return (String) ( task.getId() + "," + type + "," + task.getName()+ "," + task.getStatus()+ "," + task.getDescription()+ "," + idEpic);
+        return task.getId() + "," + type + "," + task.getName() + "," + task.getStatus() + "," + task.getDescription() + "," + idEpic;
     }
 
     // переопределение методов для сохранения данных в файле
