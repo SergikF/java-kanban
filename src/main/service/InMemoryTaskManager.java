@@ -5,16 +5,17 @@ import main.classes.Status;
 import main.classes.SubTask;
 import main.classes.Task;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class TaskManagerImpl implements TaskManagerService {
-    private int globalId = 1; // Глобальный счётчик всех задач
-    private final HashMap<Integer, Task> task = new HashMap<>();
-    private final HashMap<Integer, Epic> epic = new HashMap<>();
-    private final HashMap<Integer, SubTask> subTask = new HashMap<>();
-    private final HistoryManagerService history = Managers.getDefaultHistory();
+public class InMemoryTaskManager implements TaskManager {
+    protected int globalId = 1; // Глобальный счётчик всех задач
+    protected final HashMap<Integer, Task> task = new HashMap<>();
+    protected final HashMap<Integer, Epic> epic = new HashMap<>();
+    protected final HashMap<Integer, SubTask> subTask = new HashMap<>();
+    protected final HistoryManager history = Managers.getDefaultHistory();
 
     // добавляем задачу
     @Override
@@ -252,5 +253,10 @@ public class TaskManagerImpl implements TaskManagerService {
 
     public List<Task> getHistory() {
         return history.getHistory();
+    }
+
+    @Override
+    public File getFile() {
+        return null;
     }
 }

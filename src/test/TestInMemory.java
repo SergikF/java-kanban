@@ -5,15 +5,15 @@ import main.classes.Status;
 import main.classes.SubTask;
 import main.classes.Task;
 import main.service.Managers;
-import main.service.TaskManagerService;
+import main.service.TaskManager;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 
-class TestCase {
+class TestInMemory {
 
-    private static TaskManagerService testManager;
+    private static TaskManager testManager;
     private static Task taskItem;
     private static Epic epicItem;
     private static SubTask subTaskItem;
@@ -25,7 +25,7 @@ class TestCase {
         Assertions.assertNotNull(testManager); // проверяем что менеджер создан
         Assertions.assertNotNull(testManager.getAllTasks()); // проверяем что список задач создан
         Assertions.assertNotNull(testManager.getAllEpics()); // проверяем что список эпиков создан
-        Assertions.assertNotNull(testManager.getAllSubTasks()); // проверяем что список субзадач создан
+        Assertions.assertNotNull(testManager.getAllSubTasks()); // проверяем что список подзадач создан
         Assertions.assertNotNull(testManager.getHistory()); // проверяем что история создана
 
         // Создаём элементы для добавления в менеджер
@@ -48,14 +48,14 @@ class TestCase {
 
         // Проверяем, что globalId имеет последний свободный id номер
         Assertions.assertEquals(4, testManager.getGlobalId());
-        // Проверяем, что элементы добавлены в менеджер
+        // Проверяем, что элементы добавлены в менеджере
         // затем ищем элемент в менеджере по его id
         // и сравниваем с элементом созданным в тесте
         Assertions.assertEquals(taskItem, testManager.getTask(taskItem.getId()));
         Assertions.assertEquals(epicItem, testManager.getEpic(epicItem.getId()));
         Assertions.assertEquals(subTaskItem, testManager.getSubTask(subTaskItem.getId()));
 
-        // Проверяем идентичность отправляемых элементов в менеджер с сохранёнными в менеджере по всем значениям
+        // Проверяем идентичность отправляемых элементов в менеджере с сохранёнными в менеджере по всем значениям
         // Проверяем обычные задачи
         Assertions.assertEquals(taskItem.getName(), testManager.getTask(taskItem.getId()).getName());
         Assertions.assertEquals(taskItem.getDescription(), testManager.getTask(taskItem.getId()).getDescription());
@@ -138,7 +138,7 @@ class TestCase {
         taskItem1 = testManager.getTask(1);
         taskItem1 = testManager.getSubTask(3);
         taskItem1 = testManager.getEpic(2);
-        // проверяем, что история осталась с 3 элементам. Что дублирования записей нет.
+        // Проверяем, что история осталась с 3 элементам. Что дублирования записей нет.
         Assertions.assertEquals(3, testManager.getHistory().size(), "В истории появились дубли.");
         // удаляем задачу и проверяем состояние истории - уменьшилась ли она, и есть ли запись с удалённой задачей.
         testManager.deleteTask(1);

@@ -4,10 +4,11 @@ import main.classes.Epic;
 import main.classes.SubTask;
 import main.classes.Task;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public interface TaskManagerService {
+public interface TaskManager {
     // добавляем задачу
     void addTask(Task taskNew);
 
@@ -60,4 +61,5 @@ public interface TaskManagerService {
 
     List<Task> getHistory();
 
+    File getFile();
 }

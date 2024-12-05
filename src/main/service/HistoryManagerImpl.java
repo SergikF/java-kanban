@@ -4,7 +4,7 @@ import main.classes.Task;
 
 import java.util.*;
 
-public class HistoryManagerImpl implements HistoryManagerService {
+public class HistoryManagerImpl implements HistoryManager {
     private final Map<Integer, Node<Task>> history = new HashMap<>();
     private Node<Task> first;
     private Node<Task> last;
