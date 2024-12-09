@@ -22,7 +22,8 @@ public class Task {
         this.status = status;
     }
 
-    public Task(int id, String name, String description, Status status, LocalDateTime startTime, Duration durationTask) {
+    public Task(int id, String name, String description, Status status,
+                LocalDateTime startTime, Duration durationTask) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -97,7 +98,7 @@ public class Task {
 
     @Override
     public String toString() {
-        return "Task{" + "id=" + id + ", name='" + name + '\'' + ", description='" + description + '\'' + ", status=" + status
-               + ", startTime=" + startTime + ", durationTask=" + durationTask + '}';
+        return "Task{" + "id=" + id + ", name='" + name + '\'' + ", description='" + description + '\''
+                + ", status=" + status + ", startTime=" + startTime + ", durationTask=" + durationTask + '}';
     }
 }
