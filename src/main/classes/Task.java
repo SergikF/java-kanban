@@ -68,11 +68,17 @@ public class Task {
         return endTime;
     }
 
-    public void setStartTime(LocalDateTime startTime) { this.startTime = startTime; }
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
 
-    public void setDurationTask(Duration durationTask) { this.durationTask = durationTask; }
+    public void setDurationTask(Duration durationTask) {
+        this.durationTask = durationTask;
+    }
 
-    public void setEndTime(LocalDateTime endTime) { this.endTime = endTime; }
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
+    }
 
     @Override
     public boolean equals(Object o) {
