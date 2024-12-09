@@ -13,6 +13,8 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 class TestInFile {
 
@@ -55,11 +57,15 @@ class TestInFile {
 
         // Создаём элементы для добавления в менеджер
         taskItem = new Task(testManager.getGlobalId(),
-                "Работа", "Просто задача", Status.NEW);
+                "Работа", "Просто задача", Status.NEW,
+                LocalDateTime.of(2024, 1, 1, 10, 5, 0),
+                Duration.ofMinutes(50));
         epicItem = new Epic(testManager.getGlobalId(),
                 "Этапы", "Поэтапная работа", Status.NEW);
         subTaskItem = new SubTask(testManager.getGlobalId(),
-                "Этап 1", "Подготовка к работе", Status.NEW, 2);
+                "Этап 1", "Подготовка к работе", Status.NEW,2,
+                LocalDateTime.of(2024, 1, 5, 8, 5, 0),
+                Duration.ofMinutes(250));
 
         // Добавляем элементы в менеджер
         testManager.addTask(taskItem);
@@ -101,11 +107,15 @@ class TestInFile {
 
         // Создаём элементы для добавления в менеджер
         taskItem = new Task(testManager.getGlobalId(),
-                "Работа", "Просто задача", Status.NEW);
+                "Работа", "Просто задача", Status.NEW,
+                LocalDateTime.of(2024, 1, 5, 10, 5, 0),
+                Duration.ofMinutes(50));
         epicItem = new Epic(testManager.getGlobalId(),
                 "Этапы", "Поэтапная работа", Status.NEW);
         subTaskItem = new SubTask(testManager.getGlobalId(),
-                "Этап 1", "Подготовка к работе", Status.NEW, 2);
+                "Этап 1", "Подготовка к работе", Status.NEW,2,
+                LocalDateTime.of(2024, 1, 1, 8, 5, 0),
+                Duration.ofMinutes(250));
 
         // Добавляем элементы в менеджер
         testManager.addTask(taskItem);
@@ -145,11 +155,15 @@ class TestInFile {
 
         // Создаём элементы для добавления в менеджер
         taskItem = new Task(testManager.getGlobalId(),
-                "Работа", "Просто задача", Status.NEW);
+                "Работа", "Просто задача", Status.NEW,
+                LocalDateTime.of(2024, 1, 1, 10, 5, 0),
+                Duration.ofMinutes(50));
         epicItem = new Epic(testManager.getGlobalId(),
                 "Этапы", "Поэтапная работа", Status.NEW);
         subTaskItem = new SubTask(testManager.getGlobalId(),
-                "Этап 1", "Подготовка к работе", Status.NEW, 2);
+                "Этап 1", "Подготовка к работе", Status.NEW,2,
+                LocalDateTime.of(2024, 1, 1, 10, 5, 0),
+                Duration.ofMinutes(250));
 
         // Добавляем элементы в менеджер
         testManager.addTask(taskItem);
@@ -174,11 +188,15 @@ class TestInFile {
 
         // Создаём элементы для добавления в менеджер
         taskItem = new Task(testManager.getGlobalId(),
-                "Работа", "Просто задача", Status.NEW);
+                "Работа", "Просто задача", Status.NEW,
+                LocalDateTime.of(2024, 1, 1, 12, 5, 0),
+                Duration.ofMinutes(50));
         epicItem = new Epic(testManager.getGlobalId(),
                 "Этапы", "Поэтапная работа", Status.NEW);
         subTaskItem = new SubTask(testManager.getGlobalId(),
-                "Этап 1", "Подготовка к работе", Status.NEW, 2);
+                "Этап 1", "Подготовка к работе", Status.NEW,2,
+                LocalDateTime.of(2024, 1, 1, 8, 5, 0),
+                Duration.ofMinutes(250));
 
         // Добавляем элементы в менеджер
         testManager.addTask(taskItem);
@@ -216,11 +234,15 @@ class TestInFile {
 
         // Создаём элементы для добавления в менеджер
         taskItem = new Task(testManager.getGlobalId(),
-                "Работа", "Просто задача", Status.NEW);
+                "Работа", "Просто задача", Status.NEW,
+                LocalDateTime.of(2024, 3, 1, 10, 5, 0),
+                Duration.ofMinutes(50));
         epicItem = new Epic(testManager.getGlobalId(),
                 "Этапы", "Поэтапная работа", Status.NEW);
         subTaskItem = new SubTask(testManager.getGlobalId(),
-                "Этап 1", "Подготовка к работе", Status.NEW, 2);
+                "Этап 1", "Подготовка к работе", Status.NEW,2,
+                LocalDateTime.of(2024, 1, 1, 8, 5, 0),
+                Duration.ofMinutes(250));
 
         // Добавляем элементы в менеджер
         testManager.addTask(taskItem);
