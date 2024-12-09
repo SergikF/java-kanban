@@ -34,7 +34,7 @@ public class Main {
                 LocalDateTime.of(2024, 1, 1, 10, 5, 0),
                 Duration.ofMinutes(50)));
         exampleTM1.addEpic(new Epic(exampleTM1.getGlobalId(),
-                "Этапы", "Поэтапная работа", Status.NEW ));
+                "Этапы", "Поэтапная работа", Status.NEW));
         exampleTM1.addSubTask(new SubTask(exampleTM1.getGlobalId(),
                 "Этап 1", "Подготовка к работе", Status.NEW, 2,
                 LocalDateTime.of(2024, 1, 1, 8, 0, 0),
