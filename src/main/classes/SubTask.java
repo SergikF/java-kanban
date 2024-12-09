@@ -1,5 +1,7 @@
 package main.classes;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 // Класс подзадач эпиков
@@ -12,16 +14,20 @@ public class SubTask extends Task {
         this.idEpic = idEpic;
     }
 
+    public SubTask(int id, String name, String description, Status status, int idEpic,
+                   LocalDateTime startTime, Duration durationTask) {
+        super(id, name, description, status, startTime, durationTask);
+        this.idEpic = idEpic;
+    }
+
     public int getIdEpic() {
         return idEpic;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof SubTask subTask)) return false;
         if (!super.equals(o)) return false;
-        SubTask subTask = (SubTask) o;
         return idEpic == subTask.idEpic;
     }
 

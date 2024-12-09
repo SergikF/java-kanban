@@ -4,7 +4,9 @@ import main.classes.*;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
@@ -27,23 +29,22 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
         if (this.file.exists()) {
             try (BufferedReader br = new BufferedReader(new FileReader(this.file, StandardCharsets.UTF_8))) {
-                                while (br.ready()) {
+                while (br.ready()) {
                     String line = br.readLine();
                     Task loadTask = fromString(line);
-
+/*
                     if (loadTask.getId() > globalId) { // если id больше чем globalId - присваиваем счётчику globalId значение id
                         globalId = loadTask.getId();
                     }
-
+*/
+                    globalId++; // увеличиваем счётчик globalId
                     switch (loadTask.getClass().getSimpleName()) {
-                        case "Task" -> task.put(loadTask.getId(), loadTask);
-                        case "Epic" -> epic.put(loadTask.getId(), (Epic) loadTask);
+                        case "Task" -> addTask(loadTask);
+                        case "Epic" -> addEpic((Epic) loadTask);
                         case "SubTask" -> {
-                            subTask.put(loadTask.getId(), (SubTask) loadTask);
-                            epic.get(((SubTask) loadTask).getIdEpic()).addSubTask(loadTask.getId());
+                            addSubTask((SubTask) loadTask);
                         }
                     }
-                    globalId++; // увеличиваем счётчик globalId
                 }
             } catch (IOException e) {
                 throw new ManagerSaveException("Не удалось восстановить данные из файла или указанный файл не найден");
@@ -59,19 +60,40 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         Status status = Status.valueOf(str[3]);
         String description = str[4];
         int idEpic = Integer.parseInt(str[5]);
-        switch (type) {
-            case TASK -> {
-                return new Task(id, name, description, status);
+        // определяем - если было записано с данными времени старта и длительности -
+        if (!str[6].equals("0")) {
+            LocalDateTime startTime = LocalDateTime.parse(str[6], DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
+            Duration duration = Duration.ofMinutes(Integer.parseInt(str[7]));
+            switch (type) {
+                case TASK -> {
+                    return new Task(id, name, description, status, startTime, duration);
+                }
+                case EPIC -> {
+                    return new Epic(id, name, description, status, startTime, duration);
+                }
+                case SUBTASK -> {
+                    return new SubTask(id, name, description, status, idEpic, startTime, duration);
+                }
+                default -> {
+                    return null;
+                }
             }
-            case EPIC -> {
-                return new Epic(id, name, description, status, new ArrayList<>());
+        } else { // если временных данных не было - используем упрощённый конструктор
+            switch (type) {
+                case TASK -> {
+                    return new Task(id, name, description, status);
+                }
+                case EPIC -> {
+                    return new Epic(id, name, description, status);
+                }
+                case SUBTASK -> {
+                    return new SubTask(id, name, description, status, idEpic);
+                }
+                default -> {
+                    return null;
+                }
             }
-            case SUBTASK -> {
-                return new SubTask(id, name, description, status, idEpic);
-            }
-            default -> {
-                return null;
-            }
+
         }
     }
 
@@ -98,7 +120,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
     }
 
-    public String toString(Task task) { // метод обработки считываемой из файла строки
+    public String toString(Task task) { // метод формирования строки для файла
         String type = "";
         int idEpic = 0;
         switch (task.getClass().getSimpleName()) {
@@ -109,7 +131,10 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 idEpic = ((SubTask) task).getIdEpic();
             }
         }
-        return task.getId() + "," + type + "," + task.getName() + "," + task.getStatus() + "," + task.getDescription() + "," + idEpic;
+        return task.getId() + "," + type + "," + task.getName() + "," + task.getStatus() + ","
+                + task.getDescription() + "," + idEpic + ","
+                + (task.getStartTime() == null ? "0" : task.getStartTime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")))
+                + "," + (task.getDurationTask() == null ? "0" : task.getDurationTask().toMinutes());
     }
 
     // переопределение методов для сохранения данных в файле

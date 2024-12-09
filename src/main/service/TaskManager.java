@@ -5,8 +5,8 @@ import main.classes.SubTask;
 import main.classes.Task;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeSet;
 
 public interface TaskManager {
     // добавляем задачу
@@ -20,11 +20,11 @@ public interface TaskManager {
 
     int getGlobalId();
 
-    ArrayList<Task> getAllTasks();
+    List<Task> getAllTasks();
 
-    ArrayList<Epic> getAllEpics();
+    List<Epic> getAllEpics();
 
-    ArrayList<SubTask> getAllSubTasks();
+    List<SubTask> getAllSubTasks();
 
     Task getTask(int id);
 
@@ -33,7 +33,7 @@ public interface TaskManager {
     SubTask getSubTask(int id);
 
     // выводим информацию об эпике по его id, с проверкой, что эпик существует
-    Object getEpicSubTasks(int id);
+    List<SubTask> getEpicSubTasks(int id);
 
     // удаление задач
     void deleteAllTasks();
@@ -62,4 +62,8 @@ public interface TaskManager {
     List<Task> getHistory();
 
     File getFile();
+
+    TreeSet<Task> getPrioritizedTasks();
+
+    boolean isOverlay(Task task);
 }

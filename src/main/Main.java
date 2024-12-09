@@ -10,7 +10,8 @@ import main.service.TaskManager;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 public class Main {
 
@@ -29,19 +30,27 @@ public class Main {
         System.out.println();
         System.out.println(" = 1 == Формируем тестовые данные ===");
         exampleTM1.addTask(new Task(exampleTM1.getGlobalId(),
-                "Работа", "Просто задача", Status.NEW));
+                "Работа", "Просто задача", Status.NEW,
+                LocalDateTime.of(2024, 1, 1, 10, 5, 0),
+                Duration.ofMinutes(50)));
         exampleTM1.addEpic(new Epic(exampleTM1.getGlobalId(),
-                "Этапы", "Поэтапная работа", Status.NEW, new ArrayList<>()));
+                "Этапы", "Поэтапная работа", Status.NEW));
         exampleTM1.addSubTask(new SubTask(exampleTM1.getGlobalId(),
-                "Этап 1", "Подготовка к работе", Status.NEW, 2));
+                "Этап 1", "Подготовка к работе", Status.NEW, 2,
+                LocalDateTime.of(2024, 1, 1, 8, 0, 0),
+                Duration.ofHours(23)));
         exampleTM1.addTask(new Task(exampleTM1.getGlobalId(),
                 "Отдых", "Поехать в отпуск", Status.NEW));
         exampleTM1.addEpic(new Epic(exampleTM1.getGlobalId(),
-                "Обед", "Нужно утолить голод", Status.NEW, new ArrayList<>()));
+                "Обед", "Нужно утолить голод", Status.NEW));
         exampleTM1.addSubTask(new SubTask(exampleTM1.getGlobalId(),
-                "Закупка", "Надо в магазин", Status.NEW, 5));
+                "Закупка", "Надо в магазин", Status.NEW, 5,
+                LocalDateTime.of(2024, 1, 8, 9, 0, 0),
+                Duration.ofHours(6)));
         exampleTM1.addSubTask(new SubTask(exampleTM1.getGlobalId(),
-                "Приготовление", "Немного постоять у плиты", Status.NEW, 5));
+                "Приготовление", "Немного постоять у плиты", Status.NEW, 5,
+                LocalDateTime.of(2024, 1, 6, 11, 0, 0),
+                Duration.ofHours(1)));
         System.out.println("============================");
         System.out.println();
 
@@ -54,6 +63,12 @@ public class Main {
         System.out.println();
         System.out.println("Выводим историю");
         System.out.println(exampleTM1.getHistory());
+        System.out.println("============================");
+        System.out.println();
+        System.out.println("============================");
+        System.out.println("============================");
+        System.out.println(exampleTM1.getPrioritizedTasks());
+        System.out.println("============================");
         System.out.println("============================");
         System.out.println();
 
@@ -108,10 +123,7 @@ public class Main {
         // обновляем эпик "Обед" для проверки изменения описания
         System.out.println("было - " + exampleTM2.getEpic(5));
         exampleTM2.updateEpic(new Epic(5, "Обед",
-                "Время покушать", Status.IN_PROGRESS, new ArrayList<>() {{   add(6);
-                add(7);
-            }
-        }));
+                "Время покушать", Status.IN_PROGRESS));
         System.out.println("стало/было - " + exampleTM2.getEpic(5));
         // обновляем эпику "Обед" его подзадачу для проверки изменения статуса эпика
         exampleTM2.updateSubTask(new SubTask(6, "Закупка",
@@ -123,15 +135,26 @@ public class Main {
         exampleTM2.updateSubTask(new SubTask(3, "Этап 1",
                 "Подготовка к работе", Status.DONE, 2));
         System.out.println("стало - " + exampleTM2.getEpic(2));
+        exampleTM2.addTask(new Task(exampleTM2.getGlobalId(),
+                "Попытка 5", "Новая задача после загрузки", Status.NEW,
+                LocalDateTime.of(2024, 1, 6, 11, 40, 0),
+                Duration.ofHours(1)));
+        exampleTM2.addSubTask(new SubTask(exampleTM2.getGlobalId(),
+                "Попытка 6", "Новая подзадача после загрузки", Status.NEW, 2,
+                LocalDateTime.of(2024, 1, 1, 10, 50, 0),
+                Duration.ofHours(1)));
+        System.out.println("============================");
+        System.out.println();
+        System.out.println("============================");
+        System.out.println("============================");
+        System.out.println(exampleTM2.getPrioritizedTasks());
+        System.out.println("============================");
         System.out.println("============================");
         System.out.println();
 
         // 5. Выводим информацию по эпику "Обед" по его id 8
         // мне непонятно по ТЗ в каком виде должен быть этот список - есть два варианта
         System.out.println(" = 5 == Выводим список подзадач по id эпика ===");
-        System.out.println("перечисление id подзадач:");
-        System.out.println(exampleTM2.getEpic(5).getIdSubTasks());
-        System.out.println("перечисление самих подзадач:");
         System.out.println(exampleTM2.getEpicSubTasks(5));
         System.out.println("============================");
         System.out.println();
