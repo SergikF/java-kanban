@@ -325,17 +325,17 @@ public class InMemoryTaskManager implements TaskManager {
         // проверить пересекается ли эта задача по времени с другими задачами
         boolean ll = false;
         if (checkTask.getStartTime() != null && !getPrioritizedTasks().isEmpty()) {
-        ll = getPrioritizedTasks().stream()
-                .anyMatch( c->
-                    (checkTask.getStartTime().isAfter(c.getStartTime())
-                        && checkTask.getStartTime().isBefore(c.getEndTime())) ||
-                    (checkTask.getEndTime().isAfter(c.getStartTime())
-                        && checkTask.getEndTime().isBefore(c.getEndTime())) ||
-                    (checkTask.getStartTime().isBefore(c.getStartTime())
-                        && checkTask.getEndTime().isAfter(c.getEndTime()))
-                );
+            ll = getPrioritizedTasks().stream()
+                    .anyMatch(c ->
+                            (checkTask.getStartTime().isAfter(c.getStartTime())
+                                    && checkTask.getStartTime().isBefore(c.getEndTime())) ||
+                                    (checkTask.getEndTime().isAfter(c.getStartTime())
+                                            && checkTask.getEndTime().isBefore(c.getEndTime())) ||
+                                    (checkTask.getStartTime().isBefore(c.getStartTime())
+                                            && checkTask.getEndTime().isAfter(c.getEndTime()))
+                    );
         }
-        System.out.println(ll+" пересечение - id: " + checkTask.getId() + " ! ");
+        System.out.println(ll + " пересечение - id: " + checkTask.getId() + " ! ");
         return ll;
     }
 }

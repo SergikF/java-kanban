@@ -7,7 +7,6 @@ import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
@@ -30,7 +29,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
         if (this.file.exists()) {
             try (BufferedReader br = new BufferedReader(new FileReader(this.file, StandardCharsets.UTF_8))) {
-                                while (br.ready()) {
+                while (br.ready()) {
                     String line = br.readLine();
                     Task loadTask = fromString(line);
 /*
@@ -41,7 +40,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                     globalId++; // увеличиваем счётчик globalId
                     switch (loadTask.getClass().getSimpleName()) {
                         case "Task" -> addTask(loadTask);
-                        case "Epic" -> addEpic( (Epic) loadTask);
+                        case "Epic" -> addEpic((Epic) loadTask);
                         case "SubTask" -> {
                             addSubTask((SubTask) loadTask);
                         }
@@ -62,7 +61,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         String description = str[4];
         int idEpic = Integer.parseInt(str[5]);
         // определяем - если было записано с данными времени старта и длительности -
-        if (!str[6].equals("0") ) {
+        if (!str[6].equals("0")) {
             LocalDateTime startTime = LocalDateTime.parse(str[6], DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
             Duration duration = Duration.ofMinutes(Integer.parseInt(str[7]));
             switch (type) {
