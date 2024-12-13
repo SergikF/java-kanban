@@ -10,6 +10,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 class TestInMemory {
 
     private static TaskManager testManager;
@@ -28,12 +31,16 @@ class TestInMemory {
         Assertions.assertNotNull(testManager.getHistory()); // проверяем что история создана
 
         // Создаём элементы для добавления в менеджер
-        taskItem = new Task(testManager.getGlobalId(),
-                "Работа", "Просто задача", Status.NEW);
-        epicItem = new Epic(testManager.getGlobalId(),
+        taskItem = new Task(0,
+                "Работа", "Просто задача", Status.NEW,
+                LocalDateTime.of(2024, 1, 1, 10, 5, 0),
+                Duration.ofMinutes(50));
+        epicItem = new Epic(0,
                 "Этапы", "Поэтапная работа", Status.NEW);
-        subTaskItem = new SubTask(testManager.getGlobalId(),
-                "Этап 1", "Подготовка к работе", Status.NEW,2);
+        subTaskItem = new SubTask(0,
+                "Этап 1", "Подготовка к работе", Status.NEW,2,
+                LocalDateTime.of(2024, 1, 1, 8, 5, 0),
+                Duration.ofMinutes(250));
 
         // Добавляем элементы в менеджер
         testManager.addTask(taskItem);
