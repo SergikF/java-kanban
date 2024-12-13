@@ -26,15 +26,21 @@ public class InMemoryTaskManager implements TaskManager {
 
     // добавляем задачу
     @Override
-    public void addTask(Task taskNew) { //добавляем задачу
+    public void addTask(Task taskNew) {
+        if(taskNew.getId() == 0){
+            taskNew.setId(globalId++);
+        }
         task.put(taskNew.getId(), taskNew);
-        isOverlay(taskNew);
+        task.get(taskNew.getId()).setEndTime();
         setPrioritizedTasks(taskNew);
     }
 
     // добавляем эпик
     @Override
-    public void addEpic(Epic epicNew) { //добавляем эпик
+    public void addEpic(Epic epicNew) {
+        if(epicNew.getId() == 0){
+            epicNew.setId(globalId++);
+        }
         epic.put(epicNew.getId(), epicNew);
     }
 
@@ -42,8 +48,11 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public boolean addSubTask(SubTask subTaskNew) {
         if (epic.containsKey(subTaskNew.getIdEpic())) {
+            if (subTaskNew.getId() == 0) {
+                subTaskNew.setId(globalId++);
+            }
             subTask.put(subTaskNew.getId(), subTaskNew);
-            isOverlay(subTaskNew);
+            subTask.get(subTaskNew.getId()).setEndTime();
             setPrioritizedTasks(subTaskNew);
             checkStatusEpic(subTaskNew.getIdEpic());
             return true;
@@ -211,7 +220,7 @@ public class InMemoryTaskManager implements TaskManager {
                     (taskNew.getStatus() == null ? task.get(taskNew.getId()).getStatus() : taskNew.getStatus()),
                     (taskNew.getStartTime() == null ? task.get(taskNew.getId()).getStartTime() : taskNew.getStartTime()),
                     (taskNew.getDurationTask() == null ? task.get(taskNew.getId()).getDurationTask() : taskNew.getDurationTask())));
-            isOverlay(taskNew);
+            task.get(taskNew.getId()).setEndTime();
             setPrioritizedTasks(task.get(taskNew.getId()));
             return true;
         } else { // если id не найдено - возвращаем false
@@ -226,11 +235,10 @@ public class InMemoryTaskManager implements TaskManager {
             epic.put(epicNew.getId(), new Epic(epicNew.getId(),
                     (epicNew.getName() == null ? epic.get(epicNew.getId()).getName() : epicNew.getName()),
                     (epicNew.getDescription() == null ? epic.get(epicNew.getId()).getDescription() : epicNew.getDescription()),
-                    (epicNew.getStatus() == null ? epic.get(epicNew.getId()).getStatus() : epicNew.getStatus()),
-                    (epicNew.getStartTime() == null ? epic.get(epicNew.getId()).getStartTime() : epicNew.getStartTime()),
-                    (epicNew.getDurationTask() == null ? epic.get(epicNew.getId()).getDurationTask() : epicNew.getDurationTask())));
+                    (epic.get(epicNew.getId()).getStatus()),
+                    (epic.get(epicNew.getId()).getStartTime()),
+                    (epic.get(epicNew.getId()).getDurationTask())));
             checkStatusEpic(epicNew.getId()); // поверяем статус эпика, чтобы откорректировать реальный статус
-            // на тот случай, если во входном эпике пришёл статус какой-либо
             return true;
         } else { // если id не найдено - возвращаем false
             return false;
@@ -249,7 +257,7 @@ public class InMemoryTaskManager implements TaskManager {
                     (subTaskNew.getStartTime() == null ? subTask.get(subTaskNew.getId()).getStartTime() : subTaskNew.getStartTime()),
                     (subTaskNew.getDurationTask() == null ? subTask.get(subTaskNew.getId()).getDurationTask() : subTaskNew.getDurationTask())));
             // после обновления подзадачи проводим проверку, как это повлияло на статус эпика этой задачи
-            isOverlay(subTaskNew);
+            subTask.get(subTaskNew.getId()).setEndTime();
             setPrioritizedTasks(subTask.get(subTaskNew.getId()));
             checkStatusEpic(subTaskNew.getIdEpic());
             return true;
@@ -335,7 +343,6 @@ public class InMemoryTaskManager implements TaskManager {
                                             && checkTask.getEndTime().isAfter(c.getEndTime()))
                     );
         }
-        System.out.println(ll + " пересечение - id: " + checkTask.getId() + " ! ");
         return ll;
     }
 }

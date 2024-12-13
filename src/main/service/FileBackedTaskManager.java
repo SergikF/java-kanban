@@ -19,11 +19,11 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         this.loadFromFile();
     }
 
-    public File getFile() {
+     public File getFile() {
         return file;
     }
 
-    public void loadFromFile() {
+    private void loadFromFile() {
 
         // если файл существует, то считываем из него данные
 
@@ -32,18 +32,18 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 while (br.ready()) {
                     String line = br.readLine();
                     Task loadTask = fromString(line);
-/*
-                    if (loadTask.getId() > globalId) { // если id больше чем globalId - присваиваем счётчику globalId значение id
-                        globalId = loadTask.getId();
-                    }
-*/
-                    globalId++; // увеличиваем счётчик globalId
+
+
+                    // globalId++; // увеличиваем счётчик globalId
                     switch (loadTask.getClass().getSimpleName()) {
                         case "Task" -> addTask(loadTask);
                         case "Epic" -> addEpic((Epic) loadTask);
                         case "SubTask" -> {
                             addSubTask((SubTask) loadTask);
                         }
+                    }
+                    if (loadTask.getId() >= globalId) { // если id больше чем globalId - присваиваем счётчику globalId значение id
+                        globalId = loadTask.getId()+1;
                     }
                 }
             } catch (IOException e) {
@@ -52,7 +52,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
     }
 
-    public Task fromString(String value) { // метод обработки считываемой из файла строки
+    private Task fromString(String value) { // метод обработки считываемой из файла строки
         String[] str = value.split(",");
         int id = Integer.parseInt(str[0]);
         TypeTasks type = TypeTasks.valueOf(str[1]);
@@ -120,7 +120,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
     }
 
-    public String toString(Task task) { // метод формирования строки для файла
+    private String toString(Task task) { // метод формирования строки для файла
         String type = "";
         int idEpic = 0;
         switch (task.getClass().getSimpleName()) {

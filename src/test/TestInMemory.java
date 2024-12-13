@@ -31,13 +31,13 @@ class TestInMemory {
         Assertions.assertNotNull(testManager.getHistory()); // проверяем что история создана
 
         // Создаём элементы для добавления в менеджер
-        taskItem = new Task(testManager.getGlobalId(),
+        taskItem = new Task(0,
                 "Работа", "Просто задача", Status.NEW,
                 LocalDateTime.of(2024, 1, 1, 10, 5, 0),
                 Duration.ofMinutes(50));
-        epicItem = new Epic(testManager.getGlobalId(),
+        epicItem = new Epic(0,
                 "Этапы", "Поэтапная работа", Status.NEW);
-        subTaskItem = new SubTask(testManager.getGlobalId(),
+        subTaskItem = new SubTask(0,
                 "Этап 1", "Подготовка к работе", Status.NEW,2,
                 LocalDateTime.of(2024, 1, 1, 8, 5, 0),
                 Duration.ofMinutes(250));
