@@ -27,7 +27,7 @@ public class InMemoryTaskManager implements TaskManager {
     // добавляем задачу
     @Override
     public void addTask(Task taskNew) {
-        if(taskNew.getId() == 0){
+        if (taskNew.getId() == 0) {
             taskNew.setId(globalId++);
         }
         task.put(taskNew.getId(), taskNew);
@@ -38,7 +38,7 @@ public class InMemoryTaskManager implements TaskManager {
     // добавляем эпик
     @Override
     public void addEpic(Epic epicNew) {
-        if(epicNew.getId() == 0){
+        if (epicNew.getId() == 0) {
             epicNew.setId(globalId++);
         }
         epic.put(epicNew.getId(), epicNew);
@@ -186,6 +186,7 @@ public class InMemoryTaskManager implements TaskManager {
             for (SubTask idEpic : getEpicSubTasks(id)) {
                 subTask.remove(idEpic.getId());
                 history.remove(idEpic.getId());
+                prioritizedTasks.remove(idEpic);
             }
             epic.remove(id);
             history.remove(id);
@@ -215,11 +216,16 @@ public class InMemoryTaskManager implements TaskManager {
         if (task.containsKey(taskNew.getId())) {
             // если id найдено в задачах - обновляем задачу
             task.put(taskNew.getId(), new Task(taskNew.getId(),
-                    (taskNew.getName() == null ? task.get(taskNew.getId()).getName() : taskNew.getName()),
-                    (taskNew.getDescription() == null ? task.get(taskNew.getId()).getDescription() : taskNew.getDescription()),
-                    (taskNew.getStatus() == null ? task.get(taskNew.getId()).getStatus() : taskNew.getStatus()),
-                    (taskNew.getStartTime() == null ? task.get(taskNew.getId()).getStartTime() : taskNew.getStartTime()),
-                    (taskNew.getDurationTask() == null ? task.get(taskNew.getId()).getDurationTask() : taskNew.getDurationTask())));
+                    (taskNew.getName() == null ?
+                            task.get(taskNew.getId()).getName() : taskNew.getName()),
+                    (taskNew.getDescription() == null ?
+                            task.get(taskNew.getId()).getDescription() : taskNew.getDescription()),
+                    (taskNew.getStatus() == null ?
+                            task.get(taskNew.getId()).getStatus() : taskNew.getStatus()),
+                    (taskNew.getStartTime() == null ?
+                            task.get(taskNew.getId()).getStartTime() : taskNew.getStartTime()),
+                    (taskNew.getDurationTask() == null ?
+                            task.get(taskNew.getId()).getDurationTask() : taskNew.getDurationTask())));
             task.get(taskNew.getId()).setEndTime();
             setPrioritizedTasks(task.get(taskNew.getId()));
             return true;
@@ -233,8 +239,10 @@ public class InMemoryTaskManager implements TaskManager {
         if (epic.containsKey(epicNew.getId())) {
             // если id найдено в эпиках - обновляем эпик
             epic.put(epicNew.getId(), new Epic(epicNew.getId(),
-                    (epicNew.getName() == null ? epic.get(epicNew.getId()).getName() : epicNew.getName()),
-                    (epicNew.getDescription() == null ? epic.get(epicNew.getId()).getDescription() : epicNew.getDescription()),
+                    (epicNew.getName() == null ?
+                            epic.get(epicNew.getId()).getName() : epicNew.getName()),
+                    (epicNew.getDescription() == null ?
+                            epic.get(epicNew.getId()).getDescription() : epicNew.getDescription()),
                     (epic.get(epicNew.getId()).getStatus()),
                     (epic.get(epicNew.getId()).getStartTime()),
                     (epic.get(epicNew.getId()).getDurationTask())));
@@ -250,12 +258,18 @@ public class InMemoryTaskManager implements TaskManager {
         if (subTask.containsKey(subTaskNew.getId())) {
             // если id найдено в подзадачах - обновляем подзадачу
             subTask.put(subTaskNew.getId(), new SubTask(subTaskNew.getId(),
-                    (subTaskNew.getName() == null ? subTask.get(subTaskNew.getId()).getName() : subTaskNew.getName()),
-                    (subTaskNew.getDescription() == null ? subTask.get(subTaskNew.getId()).getDescription() : subTaskNew.getDescription()),
-                    (subTaskNew.getStatus() == null ? subTask.get(subTaskNew.getId()).getStatus() : subTaskNew.getStatus()),
-                    (subTaskNew.getIdEpic() == 0 ? subTask.get(subTaskNew.getId()).getIdEpic() : subTaskNew.getIdEpic()),
-                    (subTaskNew.getStartTime() == null ? subTask.get(subTaskNew.getId()).getStartTime() : subTaskNew.getStartTime()),
-                    (subTaskNew.getDurationTask() == null ? subTask.get(subTaskNew.getId()).getDurationTask() : subTaskNew.getDurationTask())));
+                    (subTaskNew.getName() == null ?
+                            subTask.get(subTaskNew.getId()).getName() : subTaskNew.getName()),
+                    (subTaskNew.getDescription() == null ?
+                            subTask.get(subTaskNew.getId()).getDescription() : subTaskNew.getDescription()),
+                    (subTaskNew.getStatus() == null ?
+                            subTask.get(subTaskNew.getId()).getStatus() : subTaskNew.getStatus()),
+                    (subTaskNew.getIdEpic() == 0 ?
+                            subTask.get(subTaskNew.getId()).getIdEpic() : subTaskNew.getIdEpic()),
+                    (subTaskNew.getStartTime() == null ?
+                            subTask.get(subTaskNew.getId()).getStartTime() : subTaskNew.getStartTime()),
+                    (subTaskNew.getDurationTask() == null ?
+                            subTask.get(subTaskNew.getId()).getDurationTask() : subTaskNew.getDurationTask())));
             // после обновления подзадачи проводим проверку, как это повлияло на статус эпика этой задачи
             subTask.get(subTaskNew.getId()).setEndTime();
             setPrioritizedTasks(subTask.get(subTaskNew.getId()));
@@ -305,7 +319,8 @@ public class InMemoryTaskManager implements TaskManager {
                 .toList();
         if (!listNotNull.isEmpty()) {
             epic.get(id).setStartTime(listNotNull.getFirst().getStartTime());
-            epic.get(id).setDurationTask(Duration.between(listNotNull.getFirst().getStartTime(), listNotNull.getLast().getEndTime()));
+            epic.get(id).setDurationTask(Duration.between(listNotNull.getFirst().getStartTime(),
+                    listNotNull.getLast().getEndTime()));
             epic.get(id).setEndTime(listNotNull.getLast().getEndTime());
         }
     }

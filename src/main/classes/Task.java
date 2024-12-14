@@ -79,7 +79,7 @@ public class Task {
 
     public void setEndTime() {
         if (this.startTime != null && this.durationTask != null) {
-        this.endTime = this.startTime.plus(this.durationTask);
+            this.endTime = this.startTime.plus(this.durationTask);
         } else {
             this.endTime = null;
         }

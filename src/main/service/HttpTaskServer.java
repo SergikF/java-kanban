@@ -67,8 +67,6 @@ public class HttpTaskServer {
         server.createContext("/history", new HistoryHandler());
         server.createContext("/prioritized", new PrioritizedHandler());
         server.start(); // запускаем сервер
-
-        System.out.println("HTTP-сервер запущен на 8080 порту!");
     }
 
     // метод для остановки сервера из вне класса HttpTaskServer
@@ -100,12 +98,12 @@ public class HttpTaskServer {
                             // если успешно - отдаём задачу, если нет - сообщаем
                             if (task != null) {
                                 sendResponse(exchange,
-                                    toJsonString(manager.getTask(getId(path[2]).get())),
-                                    200);
+                                        toJsonString(manager.getTask(getId(path[2]).get())),
+                                        200);
                             } else {
                                 sendResponse(exchange,
-                                    "Задачи с id = " + path[2] + " не существует !",
-                                    404);
+                                        "Задачи с id = " + path[2] + " не существует !",
+                                        404);
                             }
                             break;
                         }
@@ -120,11 +118,11 @@ public class HttpTaskServer {
                     if (path.length <= 2) {
                         if (!manager.isOverlay(task)) {
                             manager.addTask(task);
-                            sendResponse(exchange, "Задача добавлена !", 201);
+                            sendResponse(exchange, "Задача добавлена !", 200);
                         } else {
                             sendResponse(exchange,
-                                "Задача по времени выполнения пересекается с существующими задачами !",
-                                406);
+                                    "Задача по времени выполнения пересекается с существующими задачами !",
+                                    406);
                         }
                         break;
                         // если в запросе больше чем только /tasks
@@ -143,8 +141,8 @@ public class HttpTaskServer {
                             }
                         } else {
                             sendResponse(exchange,
-                                "Задача по времени выполнения пересекается с существующими задачами !",
-                                406);
+                                    "Задача по времени выполнения пересекается с существующими задачами !",
+                                    406);
                             break;
                         }
                         break;
@@ -195,8 +193,8 @@ public class HttpTaskServer {
                                     200);
                             } else {
                                 sendResponse(exchange,
-                                    "Подзадачи с id = " + path[2] + " не существует !",
-                                    404);
+                                        "Подзадачи с id = " + path[2] + " не существует !",
+                                        404);
                             }
                             break;
                         }
@@ -208,11 +206,11 @@ public class HttpTaskServer {
                     if (path.length <= 2) {
                         if (!manager.isOverlay(task)) {
                             manager.addSubTask(task);
-                            sendResponse(exchange, "Подзадача добавлена !", 201);
+                            sendResponse(exchange, "Подзадача добавлена !", 200);
                         } else {
                             sendResponse(exchange,
-                               "Подзадача по времени выполнения пересекается с существующими задачами !",
-                               406);
+                                    "Подзадача по времени выполнения пересекается с существующими задачами !",
+                                    406);
                         }
                         break;
                     } else if (getId(path[2]).isPresent()) {
@@ -228,8 +226,8 @@ public class HttpTaskServer {
                             }
                         } else {
                             sendResponse(exchange,
-                               "Подзадача по времени выполнения пересекается с существующими задачами !",
-                               406);
+                                    "Подзадача по времени выполнения пересекается с существующими задачами !",
+                                    406);
                             break;
                         }
                         break;
@@ -240,10 +238,10 @@ public class HttpTaskServer {
                         if (getId(path[2]).isPresent()) {
                             if (manager.deleteSubTask(getId(path[2]).get())) {
                                 sendResponse(exchange,
-                                   "Подзадача с id = " + path[2] + " удалена !", 200);
+                                        "Подзадача с id = " + path[2] + " удалена !", 200);
                             } else {
                                 sendResponse(exchange,
-                                   "Подзадачи с id = " + path[2] + " не существует !", 404);
+                                    "Подзадачи с id = " + path[2] + " не существует !", 404);
                             }
                             break;
                         }
@@ -273,12 +271,12 @@ public class HttpTaskServer {
                             if (epic != null) {
                                 if (path.length == 3) {
                                     sendResponse(exchange,
-                                      toJsonString(manager.getEpic(getId(path[2]).get())),
-                                      200);
+                                            toJsonString(manager.getEpic(getId(path[2]).get())),
+                                            200);
                                 } else if (path[3].equals("subtasks")) {
                                     sendResponse(exchange,
-                                      toJsonString(manager.getEpicSubTasks(getId(path[2]).get())),
-                                      200);
+                                     toJsonString(manager.getEpicSubTasks(getId(path[2]).get())),
+                                     200);
                                 }
                             } else {
                                 sendResponse(exchange,
@@ -293,7 +291,7 @@ public class HttpTaskServer {
                     Epic task = fromJsonString(exchange, Epic.class);
                     if (path.length <= 2) {
                         manager.addEpic(task);
-                        sendResponse(exchange, "Эпик добавлен !", 201);
+                        sendResponse(exchange, "Эпик добавлен !", 200);
                         break;
                     } else if (getId(path[2]).isPresent()) {
                         if (manager.updateEpic(task)) {
@@ -377,6 +375,7 @@ public class HttpTaskServer {
     // Адаптер для LocalDateTime
     static class LDTAdapter extends TypeAdapter<LocalDateTime> {
         private static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss.SSS");
+
         @Override
         public void write(JsonWriter jsonWriter, LocalDateTime localDateTime) throws IOException {
             if (localDateTime != null) {
@@ -385,11 +384,13 @@ public class HttpTaskServer {
                 jsonWriter.nullValue();
             }
         }
+
         @Override
         public LocalDateTime read(final JsonReader jsonReader) throws IOException {
             if (jsonReader.peek() != JsonToken.NULL) {
                 return LocalDateTime.parse(jsonReader.nextString(), dtf);
             } else {
+                jsonReader.nextNull();
                 return null;
             }
         }
@@ -405,11 +406,13 @@ public class HttpTaskServer {
                 jsonWriter.nullValue();
             }
         }
+
         @Override
         public Duration read(final JsonReader jsonReader) throws IOException {
             if (jsonReader.peek() != JsonToken.NULL) {
                 return Duration.parse(jsonReader.nextString());
             } else {
+                jsonReader.nextNull();
                 return null;
             }
         }

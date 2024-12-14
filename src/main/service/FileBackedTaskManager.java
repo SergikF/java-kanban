@@ -19,7 +19,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         this.loadFromFile();
     }
 
-     public File getFile() {
+    public File getFile() {
         return file;
     }
 
@@ -42,8 +42,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                             addSubTask((SubTask) loadTask);
                         }
                     }
-                    if (loadTask.getId() >= globalId) { // если id больше чем globalId - присваиваем счётчику globalId значение id
-                        globalId = loadTask.getId()+1;
+                    // если id больше чем globalId - присваиваем счётчику globalId значение id
+                    if (loadTask.getId() >= globalId) {
+                        globalId = loadTask.getId() + 1;
                     }
                 }
             } catch (IOException e) {
@@ -62,7 +63,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         int idEpic = Integer.parseInt(str[5]);
         // определяем - если было записано с данными времени старта и длительности -
         if (!str[6].equals("0")) {
-            LocalDateTime startTime = LocalDateTime.parse(str[6], DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
+            LocalDateTime startTime = LocalDateTime.parse(str[6],
+                    DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
             Duration duration = Duration.ofMinutes(Integer.parseInt(str[7]));
             switch (type) {
                 case TASK -> {
@@ -133,7 +135,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
         return task.getId() + "," + type + "," + task.getName() + "," + task.getStatus() + ","
                 + task.getDescription() + "," + idEpic + ","
-                + (task.getStartTime() == null ? "0" : task.getStartTime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")))
+                + (task.getStartTime() == null ? "0" : task.getStartTime()
+                .format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")))
                 + "," + (task.getDurationTask() == null ? "0" : task.getDurationTask().toMinutes());
     }
 
