@@ -309,7 +309,7 @@ class TestHttpApi {
     }
 
     @Test
-    void Overlays() throws IOException, InterruptedException {
+    void overlays() throws IOException, InterruptedException {
         Gson gson = new GsonBuilder()
                 .setPrettyPrinting()
                 .serializeNulls()
