@@ -50,7 +50,7 @@ class TestTMInMemory {
     }
 
     @Test
-    void AddItem_CorrectOfRecordInputAndSave() {
+    void addItem_CorrectOfRecordInputAndSave() {
 
         // Проверяем, что globalId имеет последний свободный id номер
         Assertions.assertEquals(4, testManager.getGlobalId());
@@ -105,7 +105,7 @@ class TestTMInMemory {
     }
 
     @Test
-    void AddToHistoryAndChanges_HistoryIsCreatedRecordedCorrectlyAndChanged() {
+    void addToHistoryAndChanges_HistoryIsCreatedRecordedCorrectlyAndChanged() {
         // Проверяем, что в истории только 1 запись - стартовая
         Assertions.assertEquals(1, testManager.getHistory().size(), "В истории не одна запись.");
         // Добавляем элемент в историю при помощи запроса к менеджеру
