@@ -30,7 +30,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-class CheckHttpApi {
+class TestHttpApi {
     protected HttpTaskServer testserver;
     protected InMemoryTaskManager taskManager;
 
@@ -373,13 +373,6 @@ class CheckHttpApi {
 
     @Test
     void deleteItems_DeleteTaskAndSubTaskAndEpics_correctlyDelete() throws IOException, InterruptedException {
-        Gson gson = new GsonBuilder()
-                .setPrettyPrinting()
-                .serializeNulls()
-                .registerTypeAdapter(LocalDateTime.class, new LDTAdapter())
-                .registerTypeAdapter(Duration.class, new DAdapter())
-                .create(); // создаём объект Gson
-
         // подгружаем тестовые данные в трекер задач
         initTest(taskManager);
 
@@ -643,7 +636,7 @@ class CheckHttpApi {
     }
 
     // Адаптер для LocalDateTime
-    class LDTAdapter extends TypeAdapter<LocalDateTime> {
+    static class LDTAdapter extends TypeAdapter<LocalDateTime> {
         private static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss.SSS");
 
         @Override
@@ -667,7 +660,7 @@ class CheckHttpApi {
     }
 
     // Адаптер для Duration
-    class DAdapter extends TypeAdapter<Duration> {
+    static class DAdapter extends TypeAdapter<Duration> {
         @Override
         public void write(JsonWriter jsonWriter, Duration duration) throws IOException {
             if (duration != null) {
@@ -689,13 +682,13 @@ class CheckHttpApi {
     }
 
     // для разбора JSON
-    class TaskTypeToken extends TypeToken<List<Task>> {
+    static class TaskTypeToken extends TypeToken<List<Task>> {
     }
 
-    class SubTaskTypeToken extends TypeToken<List<SubTask>> {
+    static class SubTaskTypeToken extends TypeToken<List<SubTask>> {
     }
 
-    class EpicTypeToken extends TypeToken<List<Epic>> {
+    static class EpicTypeToken extends TypeToken<List<Epic>> {
     }
 
 }

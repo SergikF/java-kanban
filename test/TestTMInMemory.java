@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
-class CheckInMemory {
+class TestTMInMemory {
 
     private static TaskManager testManager;
     private static Task taskItem;

@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
-class CheckWithFile {
+class TestTMWithFile {
 
     private static TaskManager testManager;
     private static Task taskItem;
