@@ -309,7 +309,7 @@ class TestHttpApi {
     }
 
     @Test
-    void overlaysItems_ifTimeOccupiedByTask_cannotAddTaskThisTime() throws IOException, InterruptedException {
+    void checkingOverlaysItems_ifTimeOccupiedByTask_cannotAddTaskThisTime() throws IOException, InterruptedException {
         Gson gson = new GsonBuilder()
                 .setPrettyPrinting()
                 .serializeNulls()

@@ -52,7 +52,7 @@ class TestTMWithFile {
     }
 
     @Test
-    void WriteAndReadDataFile_CorrectInputOutput() {
+    void writeAndReadDataFile_CorrectInputOutput() {
         // Проверяем что менеджер сохраняет данные в файл
 
         // Создаём элементы для добавления в менеджер
@@ -103,7 +103,7 @@ class TestTMWithFile {
     }
 
     @Test
-    void AddItem_CorrectOfRecordInputAndSave() {
+    void addItem_CorrectOfRecordInputAndSave() {
 
         // Создаём элементы для добавления в менеджер
         taskItem = new Task(0,
@@ -160,7 +160,7 @@ class TestTMWithFile {
 
 
     @Test
-    void checkIdentityOfItemsWithOneId() {
+    void checkingIdentityOfItemsWithOneId() {
 
         // Создаём элементы для добавления в менеджер
         taskItem = new Task(0,
@@ -193,7 +193,7 @@ class TestTMWithFile {
     }
 
     @Test
-    void AddToHistoryAndChanges_HistoryIsCreatedRecordedCorrectlyAndChanged() {
+    void addToHistoryAndChanges_HistoryIsCreatedRecordedCorrectlyAndChanged() {
 
         // Создаём элементы для добавления в менеджер
         taskItem = new Task(0,
@@ -241,7 +241,7 @@ class TestTMWithFile {
     }
 
     @Test
-    void ChangesInHistory_DeletingItem_historyIsDeletedAndNoRepeatHistory() {
+    void checkingChangesInHistory_DeletingItem_historyIsDeletedAndNoRepeatHistory() {
 
         // Создаём элементы для добавления в менеджер
         taskItem = new Task(0,

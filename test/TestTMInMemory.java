@@ -90,7 +90,7 @@ class TestTMInMemory {
 
 
     @Test
-    void checkIdentityOfItemsWithOneId() {
+    void checkingIdentityOfItemsWithOneId() {
         // проверяем равенство элементов с одним и тем-же id
         Task taskItem1 = testManager.getTask(1);
         Task taskItem2 = testManager.getTask(1);
@@ -135,7 +135,7 @@ class TestTMInMemory {
     }
 
     @Test
-    void ChangesInHistory_DeletingItem_historyIsDeletedAndNoRepeatHistory() {
+    void checkingChangesInHistory_DeletingItem_historyIsDeletedAndNoRepeatHistory() {
         // Проверяем, что в истории только стартовая запись
         Assertions.assertEquals(1,
                 testManager.getHistory().size(), "В истории не одна запись.");
