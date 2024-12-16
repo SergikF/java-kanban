@@ -11,7 +11,7 @@ import main.classes.Epic;
 import main.classes.Status;
 import main.classes.SubTask;
 import main.classes.Task;
-import main.service.HttpTaskServer;
+import main.HTTPserver.HttpTaskServer;
 import main.service.InMemoryTaskManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,12 +30,12 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-class TestHttpApi {
+class CheckHttpApi {
     protected HttpTaskServer testserver;
     protected InMemoryTaskManager taskManager;
 
     @BeforeEach
-    void initialize() throws IOException {
+    void initializeClass() throws IOException {
         // создание и запуск сервера
         taskManager = new InMemoryTaskManager();
         testserver = new HttpTaskServer(taskManager);
@@ -50,7 +50,7 @@ class TestHttpApi {
     // сами тесты
 
     @Test
-    void getAllItems() throws IOException, InterruptedException {
+    void getAllItemsTaskAndSubTaskAndEpic() throws IOException, InterruptedException {
         Gson gson = new GsonBuilder()
                 .setPrettyPrinting()
                 .serializeNulls()
@@ -93,7 +93,7 @@ class TestHttpApi {
     }
 
     @Test
-    void getItemsId() throws IOException, InterruptedException {
+    void getItemsOfId_GetByIdTaskAndSubTaskAndEpic() throws IOException, InterruptedException {
         Gson gson = new GsonBuilder()
                 .setPrettyPrinting()
                 .serializeNulls()
@@ -139,7 +139,7 @@ class TestHttpApi {
     }
 
     @Test
-    void addItems() throws IOException, InterruptedException {
+    void addItems_AddTaskAndSubTaskAndEpic() throws IOException, InterruptedException {
         Gson gson = new GsonBuilder()
                 .setPrettyPrinting()
                 .serializeNulls()
@@ -204,7 +204,7 @@ class TestHttpApi {
     }
 
     @Test
-    void updateItemsAndStatus() throws IOException, InterruptedException {
+    void updateItemsAndStatus_updateItemsByIdAndStatusEpicByStatusSubTasks() throws IOException, InterruptedException {
         Gson gson = new GsonBuilder()
                 .setPrettyPrinting()
                 .serializeNulls()
@@ -309,7 +309,7 @@ class TestHttpApi {
     }
 
     @Test
-    void overlays() throws IOException, InterruptedException {
+    void overlaysItems_ifTimeOccupiedByTask_cannotAddTaskThisTime() throws IOException, InterruptedException {
         Gson gson = new GsonBuilder()
                 .setPrettyPrinting()
                 .serializeNulls()
@@ -372,7 +372,7 @@ class TestHttpApi {
     }
 
     @Test
-    void deleteItems() throws IOException, InterruptedException {
+    void deleteItems_DeleteTaskAndSubTaskAndEpics_correctlyDelete() throws IOException, InterruptedException {
         Gson gson = new GsonBuilder()
                 .setPrettyPrinting()
                 .serializeNulls()
@@ -430,7 +430,7 @@ class TestHttpApi {
     }
 
     @Test
-    void getHistory() throws IOException, InterruptedException {
+    void getHistory_correctAddHistoryAndDeleteHistoryByDeleteTask() throws IOException, InterruptedException {
         Gson gson = new GsonBuilder()
                 .setPrettyPrinting()
                 .serializeNulls()
@@ -492,7 +492,7 @@ class TestHttpApi {
     }
 
     @Test
-    void getPrioritized() throws IOException, InterruptedException {
+    void getPrioritized_correctCreateListPriorityAndAutoReordering() throws IOException, InterruptedException {
         Gson gson = new GsonBuilder()
                 .setPrettyPrinting()
                 .serializeNulls()
