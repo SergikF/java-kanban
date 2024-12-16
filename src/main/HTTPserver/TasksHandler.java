@@ -2,9 +2,7 @@ package main.HTTPserver;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import com.sun.net.httpserver.HttpServer;
 import main.classes.Task;
-import main.service.InMemoryTaskManager;
 
 import java.io.IOException;
 
