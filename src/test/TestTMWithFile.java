@@ -193,7 +193,7 @@ class TestTMWithFile {
     }
 
     @Test
-    void AddToHistoryChanges_HistoryIsCreatedRecordedCorrectlyChanged() {
+    void AddToHistoryChangesHistoryIsCreatedRecordedCorrectlyChanged() {
 
         // Создаём элементы для добавления в менеджер
         taskItem = new Task(0,
@@ -241,7 +241,7 @@ class TestTMWithFile {
     }
 
     @Test
-    void ChangesInHistory_DeletingItem_historyIsDeletedNoRepeatHistory() {
+    void ChangesInHistoryDeletingItemhistoryIsDeletedNoRepeatHistory() {
 
         // Создаём элементы для добавления в менеджер
         taskItem = new Task(0,
