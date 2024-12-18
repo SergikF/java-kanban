@@ -29,25 +29,25 @@ public class Main {
         // 1. Формируем тестовые данные
         System.out.println();
         System.out.println(" = 1 == Формируем тестовые данные ===");
-        exampleTM1.addTask(new Task(exampleTM1.getGlobalId(),
+        exampleTM1.addTask(new Task(0,
                 "Работа", "Просто задача", Status.NEW,
                 LocalDateTime.of(2024, 1, 1, 10, 5, 0),
                 Duration.ofMinutes(50)));
-        exampleTM1.addEpic(new Epic(exampleTM1.getGlobalId(),
+        exampleTM1.addEpic(new Epic(0,
                 "Этапы", "Поэтапная работа", Status.NEW));
-        exampleTM1.addSubTask(new SubTask(exampleTM1.getGlobalId(),
+        exampleTM1.addSubTask(new SubTask(0,
                 "Этап 1", "Подготовка к работе", Status.NEW, 2,
                 LocalDateTime.of(2024, 1, 1, 8, 0, 0),
                 Duration.ofHours(23)));
-        exampleTM1.addTask(new Task(exampleTM1.getGlobalId(),
+        exampleTM1.addTask(new Task(0,
                 "Отдых", "Поехать в отпуск", Status.NEW));
-        exampleTM1.addEpic(new Epic(exampleTM1.getGlobalId(),
+        exampleTM1.addEpic(new Epic(0,
                 "Обед", "Нужно утолить голод", Status.NEW));
-        exampleTM1.addSubTask(new SubTask(exampleTM1.getGlobalId(),
+        exampleTM1.addSubTask(new SubTask(0,
                 "Закупка", "Надо в магазин", Status.NEW, 5,
                 LocalDateTime.of(2024, 1, 8, 9, 0, 0),
                 Duration.ofHours(6)));
-        exampleTM1.addSubTask(new SubTask(exampleTM1.getGlobalId(),
+        exampleTM1.addSubTask(new SubTask(0,
                 "Приготовление", "Немного постоять у плиты", Status.NEW, 5,
                 LocalDateTime.of(2024, 1, 6, 11, 0, 0),
                 Duration.ofHours(1)));
@@ -63,12 +63,6 @@ public class Main {
         System.out.println();
         System.out.println("Выводим историю");
         System.out.println(exampleTM1.getHistory());
-        System.out.println("============================");
-        System.out.println();
-        System.out.println("============================");
-        System.out.println("============================");
-        System.out.println(exampleTM1.getPrioritizedTasks());
-        System.out.println("============================");
         System.out.println("============================");
         System.out.println();
 
@@ -135,20 +129,14 @@ public class Main {
         exampleTM2.updateSubTask(new SubTask(3, "Этап 1",
                 "Подготовка к работе", Status.DONE, 2));
         System.out.println("стало - " + exampleTM2.getEpic(2));
-        exampleTM2.addTask(new Task(exampleTM2.getGlobalId(),
+        exampleTM2.addTask(new Task(0,
                 "Попытка 5", "Новая задача после загрузки", Status.NEW,
                 LocalDateTime.of(2024, 1, 6, 11, 40, 0),
                 Duration.ofHours(1)));
-        exampleTM2.addSubTask(new SubTask(exampleTM2.getGlobalId(),
+        exampleTM2.addSubTask(new SubTask(0,
                 "Попытка 6", "Новая подзадача после загрузки", Status.NEW, 2,
                 LocalDateTime.of(2024, 1, 1, 10, 50, 0),
                 Duration.ofHours(1)));
-        System.out.println("============================");
-        System.out.println();
-        System.out.println("============================");
-        System.out.println("============================");
-        System.out.println(exampleTM2.getPrioritizedTasks());
-        System.out.println("============================");
         System.out.println("============================");
         System.out.println();
 

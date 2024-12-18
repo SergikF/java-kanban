@@ -77,6 +77,14 @@ public class Task {
         this.durationTask = durationTask;
     }
 
+    public void setEndTime() {
+        if (this.startTime != null && this.durationTask != null) {
+            this.endTime = this.startTime.plus(this.durationTask);
+        } else {
+            this.endTime = null;
+        }
+    }
+
     public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
     }

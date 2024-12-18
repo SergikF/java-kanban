@@ -10,7 +10,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class TestInMemory {
+import java.time.Duration;
+import java.time.LocalDateTime;
+
+class TestTMInMemory {
 
     private static TaskManager testManager;
     private static Task taskItem;
@@ -19,7 +22,7 @@ class TestInMemory {
 
     @BeforeEach
     void initializeTaskManager() {
-    // Проверяем создание менеджера через утилитарный класс, используем его в тестах
+        // Проверяем создание менеджера через утилитарный класс, используем его в тестах
         testManager = Managers.getDefault();
         Assertions.assertNotNull(testManager); // проверяем что менеджер создан
         Assertions.assertNotNull(testManager.getAllTasks()); // проверяем что список задач создан
@@ -28,12 +31,16 @@ class TestInMemory {
         Assertions.assertNotNull(testManager.getHistory()); // проверяем что история создана
 
         // Создаём элементы для добавления в менеджер
-        taskItem = new Task(testManager.getGlobalId(),
-                "Работа", "Просто задача", Status.NEW);
-        epicItem = new Epic(testManager.getGlobalId(),
+        taskItem = new Task(0,
+                "Работа", "Просто задача", Status.NEW,
+                LocalDateTime.of(2024, 1, 1, 10, 5, 0),
+                Duration.ofMinutes(50));
+        epicItem = new Epic(0,
                 "Этапы", "Поэтапная работа", Status.NEW);
-        subTaskItem = new SubTask(testManager.getGlobalId(),
-                "Этап 1", "Подготовка к работе", Status.NEW,2);
+        subTaskItem = new SubTask(0,
+                "Этап 1", "Подготовка к работе", Status.NEW, 2,
+                LocalDateTime.of(2024, 1, 1, 8, 5, 0),
+                Duration.ofMinutes(250));
 
         // Добавляем элементы в менеджер
         testManager.addTask(taskItem);
@@ -43,7 +50,7 @@ class TestInMemory {
     }
 
     @Test
-    void addItem() {
+    void addItem_CorrectOfRecordInputAndSave() {
 
         // Проверяем, что globalId имеет последний свободный id номер
         Assertions.assertEquals(4, testManager.getGlobalId());
@@ -56,25 +63,34 @@ class TestInMemory {
 
         // Проверяем идентичность отправляемых элементов в менеджере с сохранёнными в менеджере по всем значениям
         // Проверяем обычные задачи
-        Assertions.assertEquals(taskItem.getName(), testManager.getTask(taskItem.getId()).getName());
-        Assertions.assertEquals(taskItem.getDescription(), testManager.getTask(taskItem.getId()).getDescription());
-        Assertions.assertEquals(taskItem.getStatus(), testManager.getTask(taskItem.getId()).getStatus());
+        Assertions.assertEquals(taskItem.getName(),
+                testManager.getTask(taskItem.getId()).getName());
+        Assertions.assertEquals(taskItem.getDescription(),
+                testManager.getTask(taskItem.getId()).getDescription());
+        Assertions.assertEquals(taskItem.getStatus(),
+                testManager.getTask(taskItem.getId()).getStatus());
         // Проверяем эпики
-        Assertions.assertEquals(epicItem.getName(), testManager.getEpic(epicItem.getId()).getName());
-        Assertions.assertEquals(epicItem.getDescription(), testManager.getEpic(epicItem.getId()).getDescription());
-        Assertions.assertEquals(epicItem.getStatus(), testManager.getEpic(epicItem.getId()).getStatus());
+        Assertions.assertEquals(epicItem.getName(),
+                testManager.getEpic(epicItem.getId()).getName());
+        Assertions.assertEquals(epicItem.getDescription(),
+                testManager.getEpic(epicItem.getId()).getDescription());
+        Assertions.assertEquals(epicItem.getStatus(),
+                testManager.getEpic(epicItem.getId()).getStatus());
         // Проверяем подзадачи
-        Assertions.assertEquals(subTaskItem.getName(), testManager.getSubTask(subTaskItem.getId()).getName());
+        Assertions.assertEquals(subTaskItem.getName(),
+                testManager.getSubTask(subTaskItem.getId()).getName());
         Assertions.assertEquals(subTaskItem.getDescription(),
                 testManager.getSubTask(subTaskItem.getId()).getDescription());
-        Assertions.assertEquals(subTaskItem.getStatus(), testManager.getSubTask(subTaskItem.getId()).getStatus());
-        Assertions.assertEquals(subTaskItem.getIdEpic(), testManager.getSubTask(subTaskItem.getId()).getIdEpic());
+        Assertions.assertEquals(subTaskItem.getStatus(),
+                testManager.getSubTask(subTaskItem.getId()).getStatus());
+        Assertions.assertEquals(subTaskItem.getIdEpic(),
+                testManager.getSubTask(subTaskItem.getId()).getIdEpic());
 
     }
 
 
     @Test
-    void testItems() {
+    void checkingIdentityOfItemsWithOneId() {
         // проверяем равенство элементов с одним и тем-же id
         Task taskItem1 = testManager.getTask(1);
         Task taskItem2 = testManager.getTask(1);
@@ -89,7 +105,7 @@ class TestInMemory {
     }
 
     @Test
-    void testHistory1() {
+    void addToHistoryAndChanges_HistoryIsCreatedRecordedCorrectlyAndChanged() {
         // Проверяем, что в истории только 1 запись - стартовая
         Assertions.assertEquals(1, testManager.getHistory().size(), "В истории не одна запись.");
         // Добавляем элемент в историю при помощи запроса к менеджеру
@@ -111,39 +127,48 @@ class TestInMemory {
         Assertions.assertEquals(2, testManager.getHistory().size(), "В истории не одна запись.");
         // Сравниваем содержимое записи истории с содержимым задачи 1 до и после изменения.
         // Первая запись не должна соответствовать taskItem1, а вторая должна соответствовать taskItem2.
-        Assertions.assertNotEquals(taskItem1, testManager.getHistory().getLast(), "записи соответствуют.");
-        Assertions.assertEquals(taskItem2, testManager.getHistory().getLast(), "записи не соответствуют.");
+        Assertions.assertNotEquals(taskItem1,
+                testManager.getHistory().getLast(), "записи соответствуют.");
+        Assertions.assertEquals(taskItem2,
+                testManager.getHistory().getLast(), "записи не соответствуют.");
 
     }
 
     @Test
-    void testHistory2() {
+    void checkingChangesInHistory_DeletingItem_historyIsDeletedAndNoRepeatHistory() {
         // Проверяем, что в истории только стартовая запись
-        Assertions.assertEquals(1, testManager.getHistory().size(), "В истории не одна запись.");
+        Assertions.assertEquals(1,
+                testManager.getHistory().size(), "В истории не одна запись.");
         // Добавляем 1 элемент в историю при помощи запроса к менеджеру
         Task taskItem1 = testManager.getTask(1);
         // проверяем, что история изменилась на 1
-        Assertions.assertEquals(2, testManager.getHistory().size(), "В историю не попала 1 запись.");
+        Assertions.assertEquals(2,
+                testManager.getHistory().size(), "В историю не попала 1 запись.");
         // Добавляем 2 элемент в историю при помощи запроса к менеджеру
         taskItem1 = testManager.getSubTask(3);
         // проверяем, что история изменилась ещё на 1
-        Assertions.assertEquals(3, testManager.getHistory().size(), "В историю не попала 2 запись.");
+        Assertions.assertEquals(3,
+                testManager.getHistory().size(), "В историю не попала 2 запись.");
         // При помощи запросов к менеджеру проверяем - повторный запросы увеличили ли количество запросов в истории.
         taskItem1 = testManager.getTask(1);
         taskItem1 = testManager.getSubTask(3);
         taskItem1 = testManager.getEpic(2);
         // Проверяем, что история осталась с 4 элементам. Что дублирования записей нет.
-        Assertions.assertEquals(3, testManager.getHistory().size(), "В истории появились дубли.");
+        Assertions.assertEquals(3,
+                testManager.getHistory().size(), "В истории появились дубли.");
         // удаляем задачу и проверяем состояние истории - уменьшилась ли она, и есть ли запись с удалённой задачей.
         testManager.deleteTask(1);
-        Assertions.assertEquals(2, testManager.getHistory().size(), "В истории не удалена запись.");
+        Assertions.assertEquals(2,
+                testManager.getHistory().size(), "В истории не удалена запись.");
         Assertions.assertNull(testManager.getTask(1), "Задача не удалена.");
         // повторяем то-же самое с подзадачей и эпиком
         testManager.deleteSubTask(3);
-        Assertions.assertEquals(1, testManager.getHistory().size(), "В истории не удалена запись.");
+        Assertions.assertEquals(1,
+                testManager.getHistory().size(), "В истории не удалена запись.");
         Assertions.assertNull(testManager.getSubTask(3), "Подзадача не удалена.");
         testManager.deleteEpic(2);
-        Assertions.assertEquals(0, testManager.getHistory().size(), "В истории не удалена запись.");
+        Assertions.assertEquals(0,
+                testManager.getHistory().size(), "В истории не удалена запись.");
         Assertions.assertNull(testManager.getEpic(2), "Эпик не удален.");
     }
 }

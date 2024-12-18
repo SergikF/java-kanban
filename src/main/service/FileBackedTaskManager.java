@@ -23,7 +23,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         return file;
     }
 
-    public void loadFromFile() {
+    private void loadFromFile() {
 
         // если файл существует, то считываем из него данные
 
@@ -32,18 +32,19 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 while (br.ready()) {
                     String line = br.readLine();
                     Task loadTask = fromString(line);
-/*
-                    if (loadTask.getId() > globalId) { // если id больше чем globalId - присваиваем счётчику globalId значение id
-                        globalId = loadTask.getId();
-                    }
-*/
-                    globalId++; // увеличиваем счётчик globalId
+
+
+                    // globalId++; // увеличиваем счётчик globalId
                     switch (loadTask.getClass().getSimpleName()) {
                         case "Task" -> addTask(loadTask);
                         case "Epic" -> addEpic((Epic) loadTask);
                         case "SubTask" -> {
                             addSubTask((SubTask) loadTask);
                         }
+                    }
+                    // если id больше чем globalId - присваиваем счётчику globalId значение id
+                    if (loadTask.getId() >= globalId) {
+                        globalId = loadTask.getId() + 1;
                     }
                 }
             } catch (IOException e) {
@@ -52,7 +53,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
     }
 
-    public Task fromString(String value) { // метод обработки считываемой из файла строки
+    private Task fromString(String value) { // метод обработки считываемой из файла строки
         String[] str = value.split(",");
         int id = Integer.parseInt(str[0]);
         TypeTasks type = TypeTasks.valueOf(str[1]);
@@ -62,7 +63,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         int idEpic = Integer.parseInt(str[5]);
         // определяем - если было записано с данными времени старта и длительности -
         if (!str[6].equals("0")) {
-            LocalDateTime startTime = LocalDateTime.parse(str[6], DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
+            LocalDateTime startTime = LocalDateTime.parse(str[6],
+                    DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
             Duration duration = Duration.ofMinutes(Integer.parseInt(str[7]));
             switch (type) {
                 case TASK -> {
@@ -120,7 +122,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
     }
 
-    public String toString(Task task) { // метод формирования строки для файла
+    private String toString(Task task) { // метод формирования строки для файла
         String type = "";
         int idEpic = 0;
         switch (task.getClass().getSimpleName()) {
@@ -133,7 +135,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
         return task.getId() + "," + type + "," + task.getName() + "," + task.getStatus() + ","
                 + task.getDescription() + "," + idEpic + ","
-                + (task.getStartTime() == null ? "0" : task.getStartTime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")))
+                + (task.getStartTime() == null ? "0" : task.getStartTime()
+                .format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")))
                 + "," + (task.getDurationTask() == null ? "0" : task.getDurationTask().toMinutes());
     }
 
